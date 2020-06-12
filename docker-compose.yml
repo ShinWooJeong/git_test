@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  webapp:
+    build:
+      context: ./wemap
+
+    container_name: WeMap-webapp
+    ports:
+      - "3300:3300"
+    volumes:
+    #  - public_vol:./public
+    #  - view_vol:./view
+      - ./wemap/public:/usr/src/app/public
+      - ./wemap/views:/usr/src/app/views
+    #   /wemap/public
+    #   #  - /mnt/c/Users/User/trytry/wemap/views:/wemap/view
+    #   - type: bind
+    #     source: ./wemap/public
+    #     target: ./public
+    #   - type: bind
+    #     source: ./wemap/views
+    #     target: ./view
+    # restart: always
+
+  tegola:
+    image: gospatial/tegola
+    container_name: WeMap-tegola
+    ports:
+      - 8000:8080
+    volumes:
+      - ./docker-config:/opt/tegola_config
+    command: serve --config /opt/tegola_config/config.toml
+    #restart: always
+    links:
+      - "postgis_openmaptiles"
+      - "postgis_openmaptiles:wemap-postgis"
+      - "WeMap-tegola"
+
+  tile:
+    build:
+      context: ./Wemap3D
+    container_name: WeMap-tileServer
+    ports:
+      - "3009:3009"
+    volumes:
+      - ./Wemap3D/contents:/usr/src/app/contents
+    #restart: always
+
+#volumes:
+#  - ./wemap/public:
+    # driver: local
+    # driver_opts:
+    #   o: bind
+    #   type: none
+    #   device: /C/Users/User/trytry/wemap/public
+ # - ./wemap/views:
+    # driver: local
+    # driver_opts:
+    #   o: bind
+    #   type: none
+    #   device: /C/Users/User/trytry/wemap/views
+  # - e82ea12ffed67afe425091a3ab8ebc4b26474f6bbe344f6b9ff83b7ef533afb9
+  #   driver: local
+  #   driver_opts:
+  #     o: bind
+  #     type: none
+  #     device: /C/Users/User/trytry/wemap/public

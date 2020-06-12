@@ -1,0 +1,557 @@
+{
+  "version": 8,
+  "name": "Seoul",
+  "metadata": {
+    "mapbox:autocomposite": false,
+    "mapbox:groups": {
+      "101da9f13b64a08fa4b6ac1168e89e5f": {"collapsed": true, "name": "Places"},
+      "a14c9607bc7954ba1df7205bf660433f": {
+        "collapsed": true,
+        "name": "Boundaries"
+      },
+      "b6371a3f2f5a9932464fa3867530a2e5": {
+        "collapsed": true,
+        "name": "Transportation"
+      }
+    }
+  },
+  "sources": {
+      "seoul": {
+          "type": "vector",
+          "tiles": ["http://192.168.0.11:8080/maps/Seoul/{z}/{x}/{y}.vector.pbf?debug=false"],
+          "tolerance": 0
+      }
+  },
+  "sprite": "https://openmaptiles.github.io/fiord-color-gl-style/sprite",
+  "glyphs": "https://api.maptiler.com/fonts/{fontstack}/{range}.pbf?key=BSklNVq1LTGzZUox0u1m",
+  "layers": [
+    {
+      "id": "background",
+      "type": "background",
+      "paint": {"background-color": "#45516E"}
+    },
+    {
+      "id": "water",
+      "type": "fill",
+      "source": "seoul",
+      "source-layer": "water",
+      "layout": {"visibility": "visible"},
+      "paint": {"fill-antialias": false, "fill-color": "#38435C"}
+    },
+    {
+      "id": "landcover_ice_shelf",
+      "type": "fill",
+      "source": "seoul",
+      "source-layer": "landcover",
+      "maxzoom": 8,
+      "filter": ["==", "subclass", "ice_shelf"],
+      "layout": {"visibility": "visible"},
+      "paint": {"fill-color": "hsl(232, 33%, 34%)", "fill-opacity": 0.4}
+    },
+    {
+      "id": "landuse_residential",
+      "type": "fill",
+      "source": "seoul",
+      "source-layer": "landuse",
+      "maxzoom": 16,
+      "filter": ["==", "landuse", "residential"],
+      "layout": {"visibility": "visible"},
+      "paint": {
+        "fill-color": "rgb(234, 234, 230)",
+        "fill-opacity": {"base": 0.6, "stops": [[8, 0.8], [9, 0.6]]}
+      }
+    },
+    {
+      "id": "landcover_wood",
+      "type": "fill",
+      "source": "seoul",
+      "source-layer": "landcover",
+      "minzoom": 10,
+      "filter": ["==", "subclass", "wood"],
+      "layout": {"visibility": "visible"},
+      "paint": {
+        "fill-color": "hsla(232, 18%, 30%, 0.57)",
+        "fill-opacity": {"base": 1, "stops": [[9, 0], [12, 1]]}
+      }
+    },
+    {
+      "id": "park",
+      "type": "fill",
+      "source": "seoul",
+      "source-layer": "park",
+      "layout": {"visibility": "visible"},
+      "paint": {"fill-color": "hsl(204, 17%, 35%)", "fill-opacity": 0.3}
+    },
+    {
+      "id": "park_outline",
+      "type": "line",
+      "source": "seoul",
+      "source-layer": "park",
+      "layout": {},
+      "paint": {"line-color": "hsl(205, 49%, 31%)", "line-dasharray": [2, 2]}
+    },
+    {
+      "id": "waterway",
+      "type": "line",
+      "source": "seoul",
+      "source-layer": "waterway",
+      "layout": {"visibility": "visible"},
+      "paint": {"line-color": "hsl(232, 23%, 28%)", "line-opacity": 0.6}
+    },
+    {
+      "id": "water_name",
+      "type": "symbol",
+      "source": "seoul",
+      "source-layer": "waterway",
+      "layout": {
+        "symbol-placement": "line",
+        "symbol-spacing": 500,
+        "text-field": "{name}",
+        "text-font": ["Metropolis Medium Italic", "Noto Sans Italic"],
+        "text-rotation-alignment": "map",
+        "text-size": 12,
+        "visibility": "visible"
+      },
+      "paint": {
+        "text-color": "hsl(223, 21%, 52%)",
+        "text-halo-blur": 0,
+        "text-halo-color": "hsl(232, 5%, 19%)",
+        "text-halo-width": 1
+      }
+    },
+    {
+      "id": "building",
+      "type": "fill",
+      "source": "seoul",
+      "source-layer": "building",
+      "minzoom": 12,
+      "paint": {
+        "fill-antialias": false,
+        "fill-color": "hsla(232, 47%, 18%, 0.65)",
+        "fill-opacity": 0.25
+      }
+    },
+    {
+      "id": "tunnel_motorway_casing",
+      "type": "line",
+      "metadata": {"mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"},
+      "source": "seoul",
+      "source-layer": "highway_line",
+      "minzoom": 6,
+      "filter": ["all", ["==", "is_tunnel", true], ["==", "highway", "motorway"]],
+      "layout": {
+        "line-cap": "butt",
+        "line-join": "miter",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "#3C4357",
+        "line-opacity": 1,
+        "line-width": {"base": 1.4, "stops": [[5.8, 0], [6, 3], [20, 40]]}
+      }
+    },
+    {
+      "id": "tunnel_motorway_inner",
+      "type": "line",
+      "metadata": {"mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"},
+      "source": "seoul",
+      "source-layer": "highway_line",
+      "minzoom": 6,
+      "filter": ["all", ["==", "is_tunnel", true], ["==", "highway", "motorway"]],
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "hsl(224, 18%, 21%)",
+        "line-width": {"base": 1.4, "stops": [[4, 2], [6, 1.3], [20, 30]]}
+      }
+    },
+    {
+      "id": "aeroway-taxiway",
+      "type": "line",
+      "metadata": {"mapbox:group": "1444849345966.4436"},
+      "source": "seoul",
+      "source-layer": "aeroway_line",
+      "minzoom": 12,
+      "filter": ["==", "aeroway", "taxiway"],
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "hsl(224, 22%, 45%)",
+        "line-opacity": 1,
+        "line-width": {"base": 1.55, "stops": [[13, 1.8], [20, 20]]}
+      }
+    },
+    {
+      "id": "aeroway-runway-casing",
+      "type": "line",
+      "metadata": {"mapbox:group": "1444849345966.4436"},
+      "source": "seoul",
+      "source-layer": "aeroway_line",
+      "minzoom": 11,
+      "filter": ["==", "aeroway", "runway"],
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "hsl(224, 22%, 45%)",
+        "line-opacity": 1,
+        "line-width": {"base": 1.5, "stops": [[11, 6], [17, 55]]}
+      }
+    },
+    {
+      "id": "aeroway-area",
+      "type": "fill",
+      "metadata": {"mapbox:group": "1444849345966.4436"},
+      "source": "seoul",
+      "source-layer": "aeroway_polygon",
+      "minzoom": 4,
+      "filter": ["in", "aeroway", "aerodrome", "apron", "runway", "taxiway"],
+      "layout": {"visibility": "visible"},
+      "paint": {"fill-color": "hsl(224, 20%, 29%)", "fill-opacity": 1}
+    },
+    {
+      "id": "aeroway-runway",
+      "type": "line",
+      "metadata": {"mapbox:group": "1444849345966.4436"},
+      "source": "seoul",
+      "source-layer": "aeroway_line",
+      "minzoom": 11,
+      "maxzoom": 24,
+      "filter": ["==", "aeroway", "runway"],
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "hsl(224, 20%, 29%)",
+        "line-opacity": 1,
+        "line-width": {"base": 1.5, "stops": [[11, 4], [17, 50]]}
+      }
+    },
+    {
+      "id": "road_area_pier",
+      "type": "fill",
+      "metadata": {},
+      "source": "seoul",
+      "source-layer": "highway_polygon",
+      "filter": ["==", "man_made", "pier"],
+      "layout": {"visibility": "visible"},
+      "paint": {"fill-antialias": true, "fill-color": "#45516E"}
+    },
+    {
+      "id": "road_pier",
+      "type": "line",
+      "metadata": {},
+      "source": "seoul",
+      "source-layer": "highway_line",
+      "filter": ["==", "man_made", "pier"],
+      "layout": {"line-cap": "round", "line-join": "round"},
+      "paint": {
+        "line-color": "#45516E",
+        "line-width": {"base": 1.2, "stops": [[15, 1], [17, 4]]}
+      }
+    },
+    {
+      "id": "highway_path",
+      "type": "line",
+      "metadata": {"mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"},
+      "source": "seoul",
+      "source-layer": "highway_line",
+      "filter": ["in", "highway", "path", "footway", "cycleway"],
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "hsl(211, 29%, 38%)",
+        "line-dasharray": [2, 2],
+        "line-opacity": 1,
+        "line-width": {"base": 1.2, "stops": [[12, 0.5], [20, 4]]}
+      }
+    },
+    {
+      "id": "highway_minor",
+      "type": "line",
+      "metadata": {"mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"},
+      "source": "seoul",
+      "source-layer": "highway_line",
+      "minzoom": 8,
+      "filter": ["in", "highway",  "footway", "residential", "minor", "service", "track"],
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "hsl(224, 22%, 45%)",
+        "line-opacity": 0.9,
+        "line-width": {"base": 1.55, "stops": [[13, 1.8], [20, 20]]}
+      }
+    },
+    {
+      "id": "highway_major_casing",
+      "type": "line",
+      "metadata": {"mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"},
+      "source": "seoul",
+      "source-layer": "highway_line",
+      "minzoom": 11,
+      "filter": ["in", "highway", "primary", "secondary", "tertiary", "trunk", "trunk_link"],
+      "layout": {
+        "line-cap": "butt",
+        "line-join": "miter",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "hsl(224, 22%, 45%)",
+        "line-dasharray": [12, 0],
+        "line-width": {"base": 1.3, "stops": [[10, 3], [20, 23]]}
+      }
+    },
+    {
+      "id": "highway_major_inner",
+      "type": "line",
+      "metadata": {"mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"},
+      "source": "seoul",
+      "source-layer": "highway_line",
+      "minzoom": 11,
+      "filter": ["in", "highway", "primary", "secondary", "tertiary", "trunk", "trunk_link"],
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "#3C4357",
+        "line-width": {"base": 1.3, "stops": [[10, 2], [20, 20]]}
+      }
+    },
+    {
+      "id": "highway_major_subtle",
+      "type": "line",
+      "metadata": {"mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"},
+      "source": "seoul",
+      "source-layer": "highway_line",
+      "maxzoom": 11,
+      "filter": ["in", "highway", "primary", "secondary", "tertiary", "trunk"],
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round",
+        "visibility": "visible"
+      },
+      "paint": {"line-color": "#3D4355", "line-opacity": 0.6, "line-width": 2}
+    },
+    {
+      "id": "highway_motorway_casing",
+      "type": "line",
+      "metadata": {"mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"},
+      "source": "seoul",
+      "source-layer": "highway_line",
+      "minzoom": 6,
+      "filter": [
+        "all",
+        ["!in", "is_bridge", "is_tunnel"],
+        ["==", "highway", "motorway"]
+      ],
+      "layout": {
+        "line-cap": "butt",
+        "line-join": "miter",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "hsl(224, 22%, 45%)",
+        "line-dasharray": [2, 0],
+        "line-opacity": 1,
+        "line-width": {"base": 1.4, "stops": [[5.8, 0], [6, 3], [20, 40]]}
+      }
+    },
+    {
+      "id": "highway_motorway_inner",
+      "type": "line",
+      "metadata": {"mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"},
+      "source": "seoul",
+      "source-layer": "highway_line",
+      "minzoom": 6,
+      "filter": [
+        "all",
+        ["!in", "is_bridge", "is_tunnel"],
+        ["==", "highway", "motorway"]
+      ],
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": {
+          "base": 1,
+          "stops": [[5.8, "hsla(0, 0%, 85%, 0.53)"], [6, "hsl(224, 20%, 29%)"]]
+        },
+        "line-width": {"base": 1.4, "stops": [[4, 2], [6, 1.3], [20, 30]]}
+      }
+    },
+    {
+      "id": "highway_motorway_subtle",
+      "type": "line",
+      "metadata": {"mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"},
+      "source": "seoul",
+      "source-layer": "highway_line",
+      "maxzoom": 6,
+      "filter": ["==", "highway", "motorway"],
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "hsla(239, 45%, 69%, 0.2)",
+        "line-width": {"base": 1.4, "stops": [[4, 2], [6, 1.3]]}
+      }
+    },
+    {
+      "id": "railway_transit",
+      "type": "line",
+      "metadata": {"mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"},
+      "source": "seoul",
+      "source-layer": "railway",
+      "minzoom": 16,
+      "filter": ["==", "railway", "subway"],
+      "layout": {"line-join": "round", "visibility": "visible"},
+      "paint": {"line-color": "hsl(200, 65%, 11%)", "line-width": 3}
+    },
+    {
+      "id": "railway_transit_dashline",
+      "type": "line",
+      "metadata": {"mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"},
+      "source": "seoul",
+      "source-layer": "railway",
+      "minzoom": 16,
+      "filter": ["all", ["==", "railway", "subway"], ["==", "is_tunnel", false]],
+      "layout": {"line-join": "round", "visibility": "visible"},
+      "paint": {
+        "line-color": "hsl(193, 63%, 26%)",
+        "line-dasharray": [3, 3],
+        "line-width": 2
+      }
+    },
+    {
+      "id": "railway_service",
+      "type": "line",
+      "metadata": {"mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"},
+      "source": "seoul",
+      "source-layer": "railway",
+      "minzoom": 16,
+      "filter": ["all", ["==", "railway", "rail"], ["has", "service"]],
+      "layout": {"line-join": "round", "visibility": "visible"},
+      "paint": {"line-color": "hsl(200, 65%, 11%)", "line-width": 3}
+    },
+    {
+      "id": "railway_service_dashline",
+      "type": "line",
+      "metadata": {"mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"},
+      "source": "seoul",
+      "source-layer": "railway",
+      "minzoom": 16,
+      "filter": ["all", ["==", "railway", "rail"], ["has", "service"]],
+      "layout": {"line-join": "round", "visibility": "visible"},
+      "paint": {
+        "line-color": "hsl(193, 63%, 26%)",
+        "line-dasharray": [3, 3],
+        "line-width": 2
+      }
+    },
+    {
+      "id": "railway",
+      "type": "line",
+      "metadata": {"mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"},
+      "source": "seoul",
+      "source-layer": "railway",
+      "minzoom": 13,
+      "filter": ["all", ["!has", "service"], ["==", "railway", "rail"]],
+      "layout": {"line-join": "round", "visibility": "visible"},
+      "paint": {
+        "line-color": "hsl(200, 10%, 18%)",
+        "line-width": {"base": 1.3, "stops": [[16, 3], [20, 7]]}
+      }
+    },
+    {
+      "id": "railway_dashline",
+      "type": "line",
+      "metadata": {"mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"},
+      "source": "seoul",
+      "source-layer": "railway",
+      "minzoom": 13,
+      "filter": ["all", ["!has", "service"], ["==", "railway", "rail"]],
+      "layout": {"line-join": "round", "visibility": "visible"},
+      "paint": {
+        "line-color": "hsl(224, 20%, 41%)",
+        "line-dasharray": [3, 3],
+        "line-width": {"base": 1.3, "stops": [[16, 1.5], [20, 6]]}
+      }
+    },
+    {
+      "id": "highway_name_other",
+      "type": "symbol",
+      "metadata": {"mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"},
+      "source": "seoul",
+      "source-layer": "highway_line",
+      "filter": ["!=", "highway", "motorway"],
+      "layout": {
+        "symbol-placement": "line",
+        "symbol-spacing": 350,
+        "text-field": "{name}",
+        "text-font": ["Metropolis Regular", "Noto Sans Regular"],
+        "text-max-angle": 30,
+        "text-pitch-alignment": "viewport",
+        "text-rotation-alignment": "map",
+        "text-size": 10,
+        "text-transform": "uppercase",
+        "visibility": "visible"
+      },
+      "paint": {
+        "text-color": "hsl(223, 31%, 61%)",
+        "text-halo-blur": 0,
+        "text-halo-color": "hsl(232, 9%, 23%)",
+        "text-halo-width": 2,
+        "text-opacity": 1,
+        "text-translate": [0, 0]
+      }
+    },
+    {
+      "id": "highway_ref",
+      "type": "symbol",
+      "metadata": {"mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"},
+      "source": "seoul",
+      "source-layer": "highway_line",
+      "filter": ["==", "highway", "motorway"],
+      "layout": {
+        "symbol-placement": "line",
+        "symbol-spacing": 350,
+        "text-field": "{ref}",
+        "text-font": ["Metropolis Light", "Noto Sans Regular"],
+        "text-pitch-alignment": "viewport",
+        "text-rotation-alignment": "viewport",
+        "text-size": 10,
+        "visibility": "none"
+      },
+      "paint": {
+        "text-color": "hsl(215, 57%, 77%)",
+        "text-halo-blur": 1,
+        "text-halo-color": "hsl(209, 64%, 19%)",
+        "text-halo-width": 1,
+        "text-opacity": 1,
+        "text-translate": [0, 2]
+      }
+    }
+  ],
+  "id": "ciwlw4z7800092qmvzlut41tx"
+}

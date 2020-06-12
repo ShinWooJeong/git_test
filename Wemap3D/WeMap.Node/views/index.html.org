@@ -1,0 +1,760 @@
+﻿<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Labs 3D (Seoul 2019)</title>
+
+  <link rel="stylesheet" href="/stylesheet/bootstrap.min.css" type="text/css">
+
+  <link rel="stylesheet" href="/stylesheet/ol.css" type="text/css">
+  <link rel="stylesheet" href="/stylesheet/style.css" type="text/css">
+  <link rel="stylesheet" href="/stylesheet/jquery-ui-1.12.0.css" type="text/css">
+  <link rel="stylesheet" href="/stylesheet/jquery-ui-slider-pips.css" type="text/css">
+  <link rel="stylesheet" href="/stylesheet/jquery-ui-slider-pips.css" type="text/css">
+
+  <!-- 외부 라이브러리들 -->
+  <script src="js/Sortable.min.js"></script>
+  <!-- 외부 라이브러리들 -->
+
+  <script src="js/map/proj4.js"></script>
+  <script src="js/map/ol3d.js"></script>
+  <script src="js/map/util.js"></script>
+  <script src="js/jquery-1.11.3.min.js"></script>
+  <script src="js/jquery-ui-1.12.0.js"></script>
+  <script src="js/jquery-ui-slider-pips.js"></script>
+  <script src="js/map/loader.js"></script>
+  <script src="js/map/mapCommon.js"></script>
+  <script src="js/map/Seoul2dmap.js"></script>
+  <script src="js/map/Seoul3dmap.js"></script>
+  <script src="js/map/MapController2D.js"></script>
+  <script src="js/map/MapController3D.js"></script>
+  <script src="js/map/application.js"></script>
+  <script src="js/map/animationController.js"></script>
+  <script src="js/map/main.js"></script>
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      initApplication();
+
+      mapCommon = new MapCommon();
+
+      application = new Application("map2d", "map3d", "2d");
+
+      application.initialize();
+
+      canvas = document.getElementById("extraCanavs");
+      context = canvas.getContext("2d");
+
+      canvas.width = $("#extraCanvasDiv").width();
+      canvas.height = $("#extraCanvasDiv").height();
+
+      // 2D <-> 3D 전환 버튼
+      $("#btn-change-mode").on("click", function () {
+        var targetType = this.className;
+
+        var selectedButton = $(this);
+
+        // 처음이 current-2d 2d 니깐. 이걸 기준으로한다.
+        selectedButton.toggleClass("current-2d");
+
+        // 2D로 바뀐다면.
+        if (selectedButton.hasClass("current-2d") === true) {
+          selectedButton.text("3D").attr({ title: "3D 보기" });
+          application.toggleMapType("2d");
+        } else {
+          selectedButton.text("2D").attr({ title: "2D 보기" });
+          application.toggleMapType("3d");
+        }
+
+      });
+
+      // load resize.
+      $(window).on("load resize", function () {
+        application.updateMapSize();
+
+        canvas.width = $("#extraCanvasDiv").width();
+        canvas.height = $("#extraCanvasDiv").height();
+      });
+
+      // 지도 측정 기능들.
+      $(".area-toolbar button").on("click", function (e) {
+        var target = e.currentTarget;
+        var className = target.className;
+
+        $(target).toggleClass("btn-selected");
+
+        // 현재 선택된 버튼이 btn-save가 아닐 때를 의미한다.
+        if ($(target).hasClass("btn-save") !== true) {
+          $(target).parent().siblings().find("button").removeClass("btn-selected");
+
+          // will (self)
+          var isSelected = $(e.currentTarget).hasClass("btn-selected");
+
+          if (isSelected === false) {
+            application.useMapFunction(6);
+            return;
+          }
+        }
+
+        switch (className) {
+          // 측정 기능들.
+          case "btn-distance":
+            application.useMapFunction(0);
+            break;
+          case "btn-size":
+            application.useMapFunction(1);
+            break;
+          case "btn-high":
+            application.useMapFunction(2);
+            break;
+          case "btn-slope":
+            application.useMapFunction(3);
+            break;
+          case "btn-view":
+            application.useMapFunction(4);
+            break;
+
+          // 측정 기능 추가
+          case "btn-tripRound":
+            application.useMapFunction(5);
+            break;
+
+          // 애니메이션 기능(가상투어)
+          case "btn-animation":
+            // 맵 활용 기능 제거
+            application.useMapFunction(100);
+
+            // animation 영역이 활성화 되어있으면 비활성화 시킨다.
+            if (animationController.getVisible() === false) {
+              animationController.setVisible(true);
+            }
+            break;
+
+          // 분석 기능들.
+          case "btn-shadow":
+            application.useMapFunction(11);
+            break;
+          case "btn-visibility":
+            application.useMapFunction(12);
+            break;
+
+
+          // 사진 촬영 기능.
+          case "btn-save":
+            application.useMapFunction(99);
+            $(target).removeClass("btn-selected");
+            break;
+
+          case "btn-cancel":
+            application.useMapFunction(100);
+            $(target).removeClass("btn-selected");
+            break;
+          default:
+            break;
+        }
+      });
+
+      // 테마 하위 내용 펼치기
+      $(".btn-card").on("click", function () {
+        $(this).toggleClass("selected");
+        $(this).closest(".lineBox").toggleClass("selected");
+        $(this).closest(".card-title").toggleClass("selected");
+        $(this).closest(".lineBox").find(".card-content").toggleClass("selected");
+      });
+
+      // 검색결과 전체 레이어 닫기
+      $(".btn-aside").on("click", function () {
+        $(".wrap-allResult").toggleClass("closed");
+        $(".btn-aside").toggleClass("closed");
+      });
+
+      // 기본적인 tooltip의 정책은 해당 버튼을 클릭하고 추가로 어떤 액션, 동작을 더 요구로 할 때만 사용한다.
+      // tooltip 초기화.
+      $(document).tooltip({
+        items: "[data-tooltip]",
+        content: function () {
+          var element = $(this);
+
+          if (element.is("[data-tooltip]")) {
+            return element.attr("data-tooltip");
+          }
+        },
+        position: {
+          my: "right center",
+          at: "left bottom-20",
+          using: function (position, feedback) {
+
+            $(this).css(position);
+            $("<div>").addClass("arrow")
+              .addClass(feedback.vertical)
+              .addClass(feedback.horizontal)
+              .appendTo(this);
+          }
+        }
+      });
+
+// Test 3ds model
+setTimeout(function(){ 
+    var modelSource = mapCommon.layers.asset3d.getSource(); 
+    var model = new ol.model3d.Max3ds({baseUrl:'http://localhost:3008/_statics/'
+                                      ,modelUrl:'ksRnD3.3ds'});
+//    var loc   = modelSource.computeModelDefaultLocation(model, Seoul3dmap.map.getView().getCenter3d() );
+    var loc   = modelSource.computeModelDefaultLocation(model, [196303,550411,20] );    
+    loc[2] += 0;
+    model.setTransform(loc,[0*Math.PI/180,0,0],[0.001,0.001,0.001]);//[0.001,0.001,0.001]
+    modelSource.getModels().push(model);
+    mapCommon.layers.asset3d.setVisible(true);
+  }, 1000);
+  //
+
+      /************************* animation *****************************/
+      var wrapperAnimation = "wrapper-animation"; // 전체 display 관리
+      var animationAreaBody = "area-animation-body"; // 실제 item 관리
+
+      animationController = new AnimationController(wrapperAnimation, animationAreaBody, application);
+
+      // animation area toogle 하기
+      $("#toggleAnimationAreaBody").on("click", function () {
+        $("#area-animation-body").toggleClass("display-none");
+      });
+
+      // 저장버튼
+      $("#saveAnimation").on("click", function () {
+        onSaveAnimation();
+      });
+
+      // 재생버튼
+      $("#playAnimation").on("click", function () {
+        onPlayAnimation();
+      });
+
+      $("#exportAnimation").on("click", function () {
+        onExportAnimation();
+      });
+
+      // 스크롤 하단에 고정하기
+      $("#toggleFixScrollDown").on("click", function () {
+        $("#toggleFixScrollDown").toggleClass("fix");
+        if ($("#toggleFixScrollDown").hasClass("fix")) {
+          $("#toggleFixScrollDownText").text(" 하단고정OFF");
+        } else {
+          $("#toggleFixScrollDownText").text(" 하단고정ON");
+        }
+
+        onToggleFixScrollDown();
+      });
+
+      // 애니메이션 초기화
+      $("#clearAnimation").on("click", function () {
+        onClearAnimation();
+      });
+
+      // 애니메이션 일시정지
+      $("#toggleAnimation").on("click", function () {
+        onToggleAnimation();
+      });
+
+      // 키이벤트
+      $(document).keydown(function (event) {
+        var keyCode = event.keyCode;
+
+        switch (keyCode) {
+          case 83: // s
+            if (!animationController.getVisible()) {
+              alert("투어 기능을 활성화 한 후 이용해주세요.");
+              return;
+            }
+            onSaveAnimation();
+            break;
+          case 80: // p
+            if (!animationController.getVisible()) {
+              alert("투어 기능을 활성화 한 후 이용해주세요.");
+              return;
+            }
+            onPlayAnimation();
+            break;
+          default:
+            break;
+        }
+      });
+
+      var animationBody = document.getElementById("area-animation-body");
+
+      var sortable = Sortable.create(animationBody, {
+        handle: '.handle-button',
+        ghostClass: 'ghost',
+        animation: 150,
+        scroll: true,
+        scrollSensitivity: 30, // px, how near the mouse must be to an edge to start scrolling.
+        scrollSpeed: 10, // px
+        onEnd: function (evt) {
+          animationController.refreshAnimationList();
+        }
+      });
+
+
+    });
+
+  </script>
+
+</head>
+
+<body oncontextmenu="return false;">
+  <div class="wrap-all">
+    <!-- 추가 canvas 영역 -->
+    <div id="extraCanvasDiv" class="extraCanvasDiv">
+      <canvas id="extraCanavs" class="extraCanavs"></canvas>
+    </div>
+
+    <!-- 지도 영역 -->
+    <div class="area-map">
+      <div id="map2d" style="width: 100%; height: 100%;"></div>
+      <div id="map3d" style="width: 100%; height: 100%;" class="display-none"></div>
+    </div>
+  </div>
+
+
+  <button type="button" class="btn-aside">결과내용 닫기</button>
+
+  <!-- 좌측에 메뉴 영역 -->
+  <div class="wrap-allResult">
+    <div style="background : #2D3030; margin: 20px">
+      <img src="/images/logo.png" width=100% height=auto alt="logo">
+
+    </div>
+    <div class="lineBox selected">
+      <div class="card-title clearFix selected">
+        <div class="textBox">
+          <p class="preview-theme">Drone 대상 지역</p>
+        </div>
+        <button type="button" class="btn-card call-pastAirPop">상세내용 펼치기/접기</button>
+      </div>
+
+      <div class="card-content" style="height:190px; overflow: auto;">
+        <p class="ul-title">대상 리스트</p>
+
+        <!-- Drone LIST -->
+        <div id="drone_list"></div>
+      </div>
+    </div>
+
+    <!-- drone template -->
+    <div id="drone_item" class="drone-item display-none">
+      <div class="drone-item-content">
+        <button type="button" id="btn_drone_name" class="btn-name">이름</button>
+        <span class="drone-date" id="drone-date">날짜</span>
+      </div>
+    </div>
+
+    <!-- 지도 설정 기능 -->
+    <div class="lineBox selected">
+      <div class="card-title clearFix selected">
+        <div class="textBox">
+          <p class="preview-theme">지도 설정 하기</p>
+        </div>
+        <button type="button" class="btn-card call-pastAirPop">상세내용 펼치기/접기</button>
+      </div>
+
+      <div class="card-content selected">
+        <p class="ul-title">3D 레이어</p>
+
+        <div class="title-slide-line-bar ">
+          <ul id="ul-3dLayer-list" class="display-none">
+            <li>
+              <input type="checkbox" id="checkbox-seoul-building" onchange="javascript:onChangeSeoulBuilding(this);"
+                checked>
+              <label for="checkbox-seoul-building">건물 (서울시 2019)</label>
+              <button type="button" class="btn-info r-10" title="Naver Labs 2019 제작">상세정보 보기</button>
+            </li>
+            <li>
+              <input type="checkbox" id="checkbox-lod1" onchange="javascript:onChangeLod1(this);">
+              <label for="checkbox-lod1">LOD1 (서울시 2019)</label>
+              <button type="button" class="btn-info r-10" title="Box Building">상세정보 보기</button>
+            </li>
+            <li>
+              <input type="checkbox" id="checkbox-lod2" onchange="javascript:onChangeLod2(this);">
+              <label for="checkbox-lod2">LOD2 (서울시 2019)</label>
+              <button type="button" class="btn-info r-10" title="Non-Texture Building">상세정보 보기</button>
+            </li>
+            <div class="title-slide-line-bar2">            
+            <li>
+              <input type="checkbox" id="checkbox-old-building" onchange="javascript:onChangeOldBuilding(this);">
+              <label for="checkbox-old-building">건물 (브이월드 2012)</label>
+              <button type="button" class="btn-info r-10" title="브이월드 2009-2012 제작">상세정보 보기</button>
+            </li>            
+            <li>
+              <input type="checkbox" id="checkbox-lod1_vw" onchange="javascript:onChangeLod1_vw(this);">
+              <label for="checkbox-lod1_vw">LOD1 (브이월드 2012)</label>
+              <button type="button" class="btn-info r-10" title="Box Building V-World">상세정보 보기</button>
+            </li>
+            <li>
+              <input type="checkbox" id="checkbox-lod2_vw" onchange="javascript:onChangeLod2_vw(this);">
+              <label for="checkbox-lod2_vw">LOD2 (브이월드 2012)</label>
+              <button type="button" class="btn-info r-10" title="Non-Texture Building V-World">상세정보 보기</button>
+            </li>
+            <div class="title-slide-line-bar2">            
+            <li>
+              <input type="checkbox" id="checkbox-structure" onchange="javascript:onChangeStructure(this);">
+              <label for="checkbox-structure">구조물 (브이월드 2012)</label>
+              <button type="button" class="btn-info r-10" title="브이월드 2009-2012 제작">상세정보 보기</button>
+            </li>                        
+            <input type="checkbox" id="checkbox-lod2_str" onchange="javascript:onChangeLod2_str(this);">
+            <label for="checkbox-lod2_str">LOD2 구조물 (브이월드 2012)</label>
+            <button type="button" class="btn-info r-10" title="Non-Texture Structure">상세정보 보기</button>
+          </li>            
+          <div class="title-slide-line-bar2">                      
+            <li>
+              <input type="checkbox" id="checkbox-asset3d" onchange="javascript:onChangeAsset3d(this);">
+              <label for="checkbox-asset3d">가상 3D 모델</label>
+              <button type="button" class="btn-info r-10" title="사용자 생성 모델">상세정보 보기</button>
+            </li>
+          </ul>
+        </div>
+
+        <p class="ul-title">배경 영상</p>
+        <label for="combobox-color-mode" style="margin-left: 15px;">Color Mode</label>
+        <select id="option_select_color-mode" class="w50p" style="color:#000; margin-left: 45px;" title="컬러모드 선택" onchange="javascript:onChangeColorMode(this);">
+          <option value="1">Sepia</option>
+          <option value="2">Gray</option>
+          <option value="0" selected>Original</option>
+        </select>
+      
+        <div class="title-slide-line-bar ">
+          <ul id="ul-2dLayer-list">
+            <li>
+              <input type="checkbox" id="checkbox-seoul-ortho" onchange="javascript:onChangeSeoulOrtho(this);" checked>
+              <label for="checkbox-seoul-ortho">실감 정사 8cm (서울시 2019)</label>
+              <button type="button" class="btn-info r-10" title="Naver Labs 2019 제작">상세정보 보기</button>
+            </li>
+            <li>
+              <input type="checkbox" id="checkbox-old-ortho" onchange="javascript:onChangeOldOrtho(this);">
+              <label for="checkbox-old-ortho">실감 정사 25cm (브이월드 2012)</label>
+              <button type="button" class="btn-info r-10" title="브이월드 2009-2012 제작 / 2016 일부 수정">상세정보 보기</button>
+            </li>
+            <li>
+              <input type="checkbox" id="checkbox-daum-ortho" onchange="javascript:onChangeDaumOrtho(this);">
+              <label for="checkbox-daum-ortho">Daum BaseMap</label>
+              <button type="button" class="btn-info r-10" title="다음 지도 - 기본 배경지도">상세정보 보기</button>
+            </li>
+            <li>
+              <input type="checkbox" id="checkbox-naver-ortho" onchange="javascript:onChangeNaverOrtho(this);">
+              <label for="checkbox-naver-ortho">Naver BaseMap</label>
+              <button type="button" class="btn-info r-10" title="네이버 지도 - 기본 배경지도">상세정보 보기</button>
+            </li>
+          </ul>
+          <!-- WMS Layer -->
+          <ul id="ul-wms-layer-list">
+            <li>
+              <input type="checkbox" id="checkbox-wms-ortho1" data-order="1" data-layername="data:cityhall" onchange="javascript:onChangeWMSOrtho(this);">
+              <!--<input type="checkbox" id="checkbox-wms-ortho1" data-order="1" data-layername="data:senario2" onchange="javascript:onChangeWMSOrtho(this);">-->
+              
+              <label for="checkbox-wms-ortho1">WMS-1</label>
+              <button type="button" class="btn-info r-10" title="서울시">상세정보 보기</button>
+            </li>
+            <li>
+              <input type="checkbox" id="checkbox-wms-ortho2" data-order="2" data-layername="data:senario1" onchange="javascript:onChangeWMSOrtho(this);">
+              <!--<input type="checkbox" id="checkbox-wms-ortho2" data-order="2" data-layername="data:senario2" onchange="javascript:onChangeWMSOrtho(this);">-->
+              <label for="checkbox-wms-ortho2">WMS-2</label>
+              <button type="button" class="btn-info r-10" title="서울시">상세정보 보기</button>
+            </li>
+          </ul>
+          <!-- WMS Layer -->
+        </div>
+
+        <p class="ul-title">배경 POI</p>
+
+        <div class="title-slide-line-bar ">
+          <select id="option_select_hybrid" class="w100p" style="color:#000;" title="하이브리드 선택" onchange="javascript:onChangeHybridLayer(this);">
+            <option value="naver">Naver Hybrid</option>
+            <option value="daum">Daum Hybrid</option>
+            <option value="debug">Debug Tile</option>
+            <option value="none" selected>None</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2D <-> 3D 전환 버튼 -->
+  <div id="area-toolbar-top" class="area-toolbar-top">
+    <ul>
+      <li>
+        <button type="button" id="btn-change-mode" title="지도 모드 전환" class="current-2d btn-3d">3D</button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- 기본 측정 기능들  -->
+  <div id="area-toolbar" class="area-toolbar">
+    <ul>
+      <li>
+        <button type="button" title="거리" class="btn-distance" data-tooltip="지도 상에 측정 구간을 지정해주세요.">거리</button>
+      </li>
+      <li>
+        <button type="button" title="면적" class="btn-size" data-tooltip="지도 상에 측정 영역을 지정해주세요.">면적</button>
+      </li>
+      <li class="used-by-3d display-none">
+        <button type="button" title="표고" class="btn-high" data-tooltip="지도 상에 측정 지점을 지정해주세요.">표고</button>
+      </li>
+      <li class="used-by-3d display-none">
+        <button type="button" title="경사도" class="btn-slope" data-tooltip="지도 상에 측정 구간을 지정해주세요.">경사도</button>
+      </li>
+      <li class="used-by-3d display-none">
+        <button type="button" title="경관보기" class="btn-view" data-tooltip="지도 상의 관심 지점을 지정해주세요.">경관보기</button>
+      </li>
+      <li class="used-by-3d display-none">
+        <button type="button" id="btn-tripRound" data-tooltip="지도 상의 관심 지점을 지정해주세요." class="btn-tripRound"></button>
+      </li>
+      <li class="used-by-3d display-none">
+        <button type="button" id="btn-animation" title="가상 투어" data-tooltip="가상 투어 지점을 설정해주세요." class="btn-animation">가상
+          투어</button>
+      </li>
+      <li>
+        <button type="button" title="화면저장" class="btn-save">지도저장</button>
+      </li>
+      <li>
+        <button type="button" title="취소" class="btn-cancel">취소</button>
+      </li>
+      <li class="used-by-3d display-none">
+
+      </li>
+      <li class="used-by-3d display-none">
+        <button type="button" id="btn-shadow" title="일조권" data-tooltip="날짜 시간을 선택해주세요." class="btn-shadow">일조권</button>
+      </li>
+      <li class="used-by-3d display-none">
+        <button type="button" id="btn-visibility" title="가시권" data-tooltip="지도 상에 관측 지점을 지정해주세요." class="btn-visibility"></button>
+      </li>
+
+    </ul>
+  </div>
+
+  <!--  경사도 -->
+  <div id="3dmap_option_slope_popup" class="area-chart display-none">
+    <div class="area-chart-header">
+      <button type="button" class="btn-pop-close" title="창닫기" onclick="javascript:closeGoogleChart();"></button>
+      <p>경사도</p>
+    </div>
+    <div id="chart_div" class="chart_div"></div>
+  </div>
+
+  <!-- trip Round 추가 -->
+  <div id="area-tripRound" class="area-tripRound display-none">
+    <div class="area-tripRound-header">
+      <span>속도 설정</span>
+    </div>
+    <div class="area-tripRound-body">
+      <div id="area-toolbar-tripRound" class="area-toolbar-tripRound" class="area-toolbar-tripRound">
+        <ul>
+          <li>
+            <button type="button" id="btn-1x" title="1x" class="btn-1x">0.5x</button>
+          </li>
+          <li>
+            <button type="button" id="btn-2x" title="2x" class="btn-2x selected">1.0x</button>
+          </li>
+          <li>
+            <button type="button" id="btn-3x" title="3x" class="btn-3x">1.5x</button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- shadow 추가 -->
+  <div id="area-shadow" class="area-shadow display-none">
+    <div class="area-shadowTime">
+      <span id="shadowTimeText">일조권 분석</span>
+      <button type="button" id="btn-reset-shadow" class="btn-reset-shadow"></button>
+    </div>
+
+    <div class="area-shadowDatePicker">
+      <input type="text" id="sunDatePicker" class="sunDatePicker"></input>
+    </div>
+    <div class="area-shadowSlider">
+      <div id="sliderTime" class="sunSlider"></div>
+    </div>
+  </div>
+
+  <!-- visibility 추가 -->
+  <div id="area-visibility" class="area-visibility display-none">
+    <div class="area-visibility-header">
+      <span id="shadowTimeText">가시권 분석</span>
+    </div>
+    <div id="area-visibility-body" class="area-visibility-body">
+      <div class="area-visibility-item">
+        <div class="area-visibility-item-left">
+          <span>내려다보는 높이(m)</span>
+        </div>
+<!--         <div class="area-visibility-item-mid">
+          <span> | </span>
+        </div> -->
+        <div class="area-visibility-item-right">
+          <input type="text" id="cameraX" class="display-none" onkeydown="onKeyDownVisibilityText(event);" onchange="changeVisibilityFactor();"
+            value="0">
+          <input type="text" id="cameraY" class="display-none" onkeydown="onKeyDownVisibilityText(event);" onchange="changeVisibilityFactor();"
+            value="0">
+          <input type="text" id="cameraZ" onkeydown="onKeyDownVisibilityText(event);" onchange="changeVisibilityFactor();"
+            value="0">
+        </div>
+      </div>
+      <div class="area-visibility-item">
+        <div class="area-visibility-item-left">
+          <span>내려다보는 각도(&deg;)</span>
+        </div>
+<!--         <div class="area-visibility-item-mid">
+          <span> | </span>
+        </div> -->
+        <div class="area-visibility-item-right">
+          <input type="text" id="tilt" onkeydown="onKeyDownVisibilityText(event);" onchange="changeVisibilityFactor();"
+            value="0">
+        </div>
+      </div>
+      <div class="area-visibility-item">
+        <div class="area-visibility-item-left">
+          <span>쳐다보는 방향(&deg;)</span>
+        </div>
+<!--         <div class="area-visibility-item-mid">
+          <span> | </span>
+        </div> -->
+        <div class="area-visibility-item-right">
+          <input type="text" id="rotation" onkeydown="onKeyDownVisibilityText(event);" onchange="changeVisibilityFactor();"
+            value="0">
+        </div>
+      </div>
+      <div class="area-visibility-item">
+        <div class="area-visibility-item-left">
+          <span>시야 범위(&deg;)</span>
+        </div>
+<!--         <div class="area-visibility-item-mid">
+          <span> | </span>
+        </div> -->
+        <div class="area-visibility-item-right">
+          <input type="text" id="fov" onkeydown="onKeyDownVisibilityText(event);" onchange="changeVisibilityFactor();"
+            value="0">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 애니메이션 컨트롤러 영역 -->
+  <div id="wrapper-animation" class="wrapper-animation display-none">
+    <div id="area-animation-header" class="area-animation-header">
+      <button id="toggleAnimationAreaBody" type="button" class="btn btn-xs" style="float: right;">
+        <span class="glyphicon glyphicon-fullscreen" aria-hidden="true">
+          확대/축소</span>
+      </button>
+      <button id="clearAnimation" type="button" class="btn btn-xs">
+        <span class="glyphicon glyphicon-refresh" aria-hidden="true">
+          초기화</span>
+      </button>
+      <button id="toggleAnimation" type="button" class="btn btn-xs">
+        <span class="glyphicon glyphicon-retweet" aria-hidden="true">
+          일시정지/재생</span>
+      </button>
+    </div>
+    <div id="area-animation-body" class="area-animation-body"></div>
+
+    <div id="animation-item" class="animation-item display-none">
+      <div class="animation-item-left">
+        <div class="progress-bar"></div>
+      </div>
+      <div class="animation-item-right">
+        <div id="area-duration" class="area-duration">
+          <button type="button">
+            <span id="subPlay" class="glyphicon glyphicon-play" style="color: #5d7bb6;"></span>
+          </button>
+          <button type="button" class="handle-button btn btn-xs">
+            <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
+          </button>
+
+          <button type="button" class="handle-button btn btn-xs">
+            <span class="glyphicon glyphicon-scale"></span>
+          </button>
+          <input type="number" id="speed" style="width: 50px; border-radius: 2px; text-align: right">
+          (m/s)
+
+          <button type="button" class="handle-button btn btn-xs">
+            <span class="glyphicon glyphicon-time" style="margin-left: 0px;"></span>
+          </button>
+
+          <input type="number" id="duration" style="width: 50px; border-radius: 2px; text-align: right">
+          (m) <select id="easing" style="padding: 1px; border-radius: 2px; float: right;">
+            <option value="ol.easing.easeIn">easeIn</option>
+            <option value="ol.easing.easeOut">easeOut</option>
+            <option value="ol.easing.inAndOut">in&Out</option>
+            <option value="ol.easing.linear" selected>linear</option>
+            <option value="ol.easing.upAndDown">up&down</option>
+          </select>
+        </div>
+        <table class="animation-table">
+          <tr>
+            <td></td>
+            <td><span id="name" style="color: #545452; font-weight: bold;"></span></td>
+            <td colspan="2">
+              <button type="button" id="btn-delete" value="삭제" style="float: right;">
+                <span class="glyphicon glyphicon glyphicon-remove"></span>
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" style="text-align: center;"><img id="img" width="92" height="92" src="/" style="object-fit: cover;">
+            </td>
+            <td colspan="2">
+              <table class="animation-innder-table">
+                <tr>
+                  <td>Center</td>
+                  <td><input type="number" id="center_x" step="0.05">
+                  </td>
+                  <td><input type="number" id="center_y" step="0.05">
+                  </td>
+                  <td style="display: none;"><input type="number" id="center_z"></td>
+                </tr>
+                <tr>
+                  <td>Rotation</td>
+                  <td colspan="3"><input type="number" id="rotation" step="0.05"></td>
+                </tr>
+                <tr>
+                  <td>Tilt</td>
+                  <td colspan="3"><input type="number" id="tilt" step="0.05">
+                  </td>
+                </tr>
+                <tr>
+                  <td>Range</td>
+                  <td colspan="3"><input type="number" id="range" step="0.05"></td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="area-animation-footer" style="padding: 1px;">
+      <div style="width: 100%; height: 20px;">
+        <input type="file" accept="text/json" onchange="onChangeAnimationFile(event)" style="display: inline; float: left;">
+        <button id="toggleFixScrollDown" type="button" class="btn btn-xs" style="float: right;">
+          <span id="toggleFixScrollDownText" class="glyphicon glyphicon-pushpin" aria-hidden="true">
+            하단고정ON</span>
+        </button>
+      </div>
+      <div style="margin-top: 5px;">
+
+        <button id="saveAnimation" type="button" class="btn btn-xs" style="float: left;">
+          <span class="glyphicon glyphicon-camera" aria-hidden="true">
+            캡쳐(s)</span>
+        </button>
+
+        <button id="playAnimation" type="button" class="btn btn-xs" style="float: left;">
+          <span class="glyphicon glyphicon-expand" aria-hidden="true">
+            전체재생(p)</span>
+        </button>
+
+        <button id="exportAnimation" type="button" class="btn btn-xs">
+          <span class="glyphicon glyphicon-save-file" aria-hidden="true">
+            내보내기</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

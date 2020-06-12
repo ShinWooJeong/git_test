@@ -1,0 +1,31 @@
+{
+  "name": "wemap-tile-server",
+  "version": "0.1.0",
+  "private": true,
+  "description": "node tile for client",
+  "main": "./WeMap.Node/app.js",
+  "scripts": {
+    "test": "echo \"Error:no test specified\" && exit 1",
+    "start": "node ."
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "2.5.5",
+    "express": "3.4.4",
+    "node-pre-gyp": "^0.15.0",
+    "request": "2.34.0",
+    "sqlite3": "^4.1.1",
+    "cluster": "^0.7.7",
+    "binaryjs": "^0.2.1",
+    "html": "^0.0.7",
+    "http-proxy": "1.1.2",
+    "jade": "^0.27.4",
+    "socket.io": "^0.9.16",
+    "w3c-xmlhttprequest": "^1.1.0",
+    "webgl": "^0.0.7",
+    "xhr2": "^0.0.7",
+    "xmlhttprequest": "^1.6.0",
+    "FileReader": "^0.10.2"
+  }
+}

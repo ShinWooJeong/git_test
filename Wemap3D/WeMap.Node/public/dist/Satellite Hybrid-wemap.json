@@ -1,0 +1,648 @@
+{
+  "pitch": 0,
+  "layers": [
+    {
+      "filter": [
+        "all"
+      ],
+      "id": "satellite",
+      "layout": {
+        "visibility": "visible"
+      },
+      "minzoom": 0,
+      "paint": {
+        "raster-opacity": 0.8
+      },
+      "source": "ortho_vw",
+      "type": "raster"
+    },
+    {
+      "filter": [
+        "all",
+        [
+          "==",
+          "$type",
+          "LineString"
+        ],
+        [
+          "==",
+          "is_tunnel",
+          true
+        ],
+        [
+          "in",
+          "highway",
+          "motorway",
+          "primary",
+          "secondary",
+          "tertiary",
+          "trunk"
+        ]
+      ],
+      "id": "tunnel",
+      "layout": {
+        "line-cap": "butt",
+        "line-join": "miter",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "rgba(255, 255, 255, 0.2)",
+        "line-dasharray": [
+          0.28,
+          0.14
+        ],
+        "line-width": [
+          "interpolate",
+          [
+            "exponential",
+            1.5
+          ],
+          [
+            "zoom"
+          ],
+          6,
+          0.5,
+          20,
+          30
+        ]
+      },
+      "source": "seoul",
+      "source-layer": "highway_line",
+      "type": "line"
+    },
+    {
+      "filter": [
+        "all",
+        [
+          "==",
+          "$type",
+          "LineString"
+        ],
+        [
+          "in",
+          "highway",
+          "path",
+          "track"
+        ]
+      ],
+      "id": "path",
+      "layout": {
+        "line-cap": "square",
+        "line-join": "bevel",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "rgba(247, 247, 247, 0.33)",
+        "line-dasharray": [
+          1,
+          1
+        ],
+        "line-width": [
+          "interpolate",
+          [
+            "exponential",
+            1.5
+          ],
+          [
+            "zoom"
+          ],
+          14,
+          0.5,
+          20,
+          4
+        ]
+      },
+      "source": "seoul",
+      "source-layer": "highway_line",
+      "type": "line"
+    },
+    {
+      "filter": [
+        "all",
+        [
+          "==",
+          "$type",
+          "LineString"
+        ],
+        [
+          "!in",
+          "highway",
+          "rail",
+          "ferry",
+          "path",
+          "track"
+        ],
+        [
+          "!=",
+          "is_tunnel",
+          true
+        ]
+      ],
+      "id": "road",
+      "layout": {
+        "line-cap": "butt",
+        "line-join": "round",
+        "visibility": "visible"
+      },
+      "minzoom": 6,
+      "paint": {
+        "line-color": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          8,
+          "rgba(255, 255, 255, 0.1)",
+          14,
+          "rgba(248, 231, 28, 0.7)"
+        ],
+        "line-width": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          5,
+          [
+            "match",
+            [
+              "get",
+              "class"
+            ],
+            [
+              "motorway",
+              "motorway_link"
+            ],
+            1,
+            0
+          ],
+          7,
+          [
+            "match",
+            [
+              "get",
+              "class"
+            ],
+            [
+              "motorway",
+              "motorway_link"
+            ],
+            1.4,
+            0
+          ],
+          8,
+          [
+            "match",
+            [
+              "get",
+              "class"
+            ],
+            [
+              "motorway",
+              "motorway_link",
+              "primary",
+              "trunk"
+            ],
+            0.75,
+            0
+          ],
+          9,
+          [
+            "match",
+            [
+              "get",
+              "class"
+            ],
+            [
+              "secondary",
+              "tertiary"
+            ],
+            0.7,
+            1
+          ],
+          10,
+          [
+            "match",
+            [
+              "get",
+              "class"
+            ],
+            [
+              "motorway",
+              "motorway_link"
+            ],
+            1.3,
+            1.3
+          ],
+          14,
+          [
+            "match",
+            [
+              "get",
+              "class"
+            ],
+            [
+              "minor",
+              "service"
+            ],
+            0.5,
+            2.4
+          ]
+        ]
+      },
+      "source": "seoul",
+      "source-layer": "highway_line",
+      "type": "line"
+    },
+    {
+      "filter": [
+        "in",
+        "admin_level",
+        4,
+        6,
+        8
+      ],
+      "id": "admin_sub",
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+        "line-color": "rgba(194, 194, 194, 0.5)",
+        "line-dasharray": [
+          2,
+          1
+        ]
+      },
+      "source": "openmaptiles",
+      "source-layer": "boundary",
+      "type": "line"
+    },
+    {
+      "filter": [
+        "all",
+        [
+          "<=",
+          "admin_level",
+          2
+        ],
+        [
+          "==",
+          "$type",
+          "LineString"
+        ]
+      ],
+      "id": "admin_country-dark",
+      "layout": {
+        "line-cap": "butt",
+        "line-join": "round",
+        "visibility": "none"
+      },
+      "paint": {
+        "line-color": "rgba(0, 0, 0, 0.51)",
+        "line-offset": 1,
+        "line-width": [
+          "interpolate",
+          [
+            "exponential",
+            1.5
+          ],
+          [
+            "zoom"
+          ],
+          3,
+          0.5,
+          21,
+          32
+        ]
+      },
+      "source": "openmaptiles",
+      "source-layer": "boundary",
+      "type": "line"
+    },
+    {
+      "filter": [
+        "all",
+        [
+          "<=",
+          "admin_level",
+          2
+        ],
+        [
+          "==",
+          "$type",
+          "LineString"
+        ]
+      ],
+      "id": "admin_country",
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round",
+        "visibility": "none"
+      },
+      "paint": {
+        "line-color": "rgba(226, 226, 226, 1)",
+        "line-width": [
+          "interpolate",
+          [
+            "exponential",
+            1.5
+          ],
+          [
+            "zoom"
+          ],
+          3,
+          0.5,
+          21,
+          32
+        ]
+      },
+      "source": "openmaptiles",
+      "source-layer": "boundary",
+      "type": "line"
+    },
+    {
+      "filter": [
+        "all",
+        [
+          "==",
+          "$type",
+          "LineString"
+        ],
+        [
+          "!has",
+          "name:ko"
+        ]
+      ],
+      "id": "road_label",
+      "layout": {
+        "symbol-placement": "line",
+        "text-field": "{name} {name:nonlatin}",
+        "text-font": [
+          "Noto Sans Bold"
+        ],
+        "text-letter-spacing": 0.1,
+        "text-rotation-alignment": "map",
+        "text-size": [
+          "interpolate",
+          [
+            "cubic-bezier",
+            0.75,
+            1,
+            0.75,
+            1
+          ],
+          [
+            "zoom"
+          ],
+          10,
+          8,
+          18,
+          10
+        ],
+        "text-transform": "none",
+        "visibility": "none"
+      },
+      "paint": {
+        "text-color": "rgba(255, 255, 255, 1)",
+        "text-halo-color": "rgba(43, 43, 43, 1)",
+        "text-halo-width": 1
+      },
+      "source": "seoul",
+      "source-layer": "highway_line",
+      "type": "symbol"
+    },
+    {
+      "minzoom": 12,
+      "layout": {
+        "text-field": "{name}",
+        "text-font": [
+          "Noto Sans Bold"
+        ],
+        "text-max-width": 10,
+        "text-size": [
+          "interpolate",
+          [
+            "cubic-bezier",
+            0.5,
+            1,
+            0.5,
+            1
+          ],
+          [
+            "zoom"
+          ],
+          13,
+          9,
+          21,
+          11
+        ],
+        "visibility": "none"
+      },
+      "filter": [
+        "!has",
+        "name:ko"
+      ],
+      "type": "symbol",
+      "source": "seoul",
+      "id": "place_label",
+      "paint": {
+        "text-color": "rgba(255, 255, 255, 1)",
+        "text-halo-blur": 0.5,
+        "text-halo-color": [
+          "match",
+          [
+            "get",
+            "class"
+          ],
+          [
+            "city"
+          ],
+          "rgba(0, 0, 0, 0.75)",
+          "rgba(43, 43, 43, 1)"
+        ],
+        "text-halo-width": 1
+      },
+      "source-layer": "poi_point"
+    },
+    {
+      "filter": [
+        "all",
+        [
+          "==",
+          "$type",
+          "Point"
+        ],
+        [
+          "in",
+          "class",
+          "country",
+          "state"
+        ],
+        [
+          "!has",
+          "name:ko"
+        ]
+      ],
+      "id": "country_label",
+      "layout": {
+        "text-field": "{name:latin}\n{name:nonlatin}",
+        "text-font": [
+          "Noto Sans Bold"
+        ],
+        "text-max-width": 10,
+        "text-size": [
+          "interpolate",
+          [
+            "cubic-bezier",
+            0.75,
+            1,
+            0.75,
+            1
+          ],
+          [
+            "zoom"
+          ],
+          1,
+          [
+            "step",
+            [
+              "get",
+              "rank"
+            ],
+            13,
+            1,
+            12,
+            2,
+            12
+          ],
+          4,
+          [
+            "step",
+            [
+              "get",
+              "rank"
+            ],
+            15,
+            1,
+            14,
+            2,
+            14
+          ],
+          6,
+          [
+            "step",
+            [
+              "get",
+              "rank"
+            ],
+            23,
+            1,
+            18,
+            2,
+            18
+          ],
+          9,
+          [
+            "step",
+            [
+              "get",
+              "rank"
+            ],
+            27,
+            1,
+            22,
+            2,
+            22
+          ]
+        ],
+        "visibility": "none"
+      },
+      "maxzoom": 12,
+      "paint": {
+        "text-color": "rgba(255, 255, 255, 1)",
+        "text-halo-blur": 1,
+        "text-halo-color": "rgba(0, 0, 0, 1)",
+        "text-halo-width": 1
+      },
+      "source": "openmaptiles",
+      "source-layer": "place",
+      "type": "symbol"
+    },
+    {
+      "id": "seoul-lod2-mesh",
+      "type": "meshlod2",
+      "source": "seoul-lod2",
+      "visibility": "visible",
+      "paint": {
+        "meshlod2-opacity": 0.8,
+        "meshlod2-color": "#DCD7D7",
+        "meshlod2-faceline": [0.5,0.7,0.8,0.9]
+      }
+    },
+    {
+      "id": "building",
+      "source": "seoul",
+      "source-layer": "building",
+      "layout": {
+        "visibility": "none"
+      },
+      "minzoom": 15,
+      "maxzoom": 20,
+      "type": "fill",
+      "paint": {
+        "fill-color": "#448aff",
+        "fill-opacity": 0.2
+      }
+    }
+  ],
+  "glyphs": "https://api.maptiler.com/fonts/{fontstack}/{range}.pbf?key=BSklNVq1LTGzZUox0u1m",
+  "name": "Satellite Hybrid-wemap",
+  "bearing": 0,
+  "metadata": {
+    "maptiler:copyright": "This style was generated on MapTiler Cloud. Usage outside of MapTiler Cloud requires valid OpenMapTiles Production Package: https://openmaptiles.com/production-package/ -- please contact us.",
+    "maputnik:renderer": "mbgljs",
+    "openmaptiles:version": "3.x",
+    "editor": "wemap"
+  },
+  "zoom": 12,
+  "center": [
+    127.100833,
+    37.511905
+  ],
+  "version": 8,
+  "sources": {
+    "maptiler_attribution": {
+      "attribution": "<a href=\"https://www.maptiler.com/copyright/\" target=\"_blank\">&copy; MapTiler</a> <a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\">&copy; OpenStreetMap contributors</a>",
+      "type": "vector"
+    },
+    "openmaptiles": {
+      "type": "vector",
+      "url": "https://api.maptiler.com/tiles/v3/tiles.json?key=BSklNVq1LTGzZUox0u1m"
+    },
+    "seoul-lod2": {
+      "type": "meshlod2",
+      "tiles": ["http://192.168.0.11:3009/tile.sqlite/lod2/{z}/{x}/{y}.wgl"],      
+      "minzoom": 13,
+      "maxzoom": 16,  
+      "attribution": "WEMAP LOD2 Building Attribution"
+    },
+    "ortho_vw": {
+      "type": "raster",
+      "tiles": [
+        "http://192.168.0.11:3009/tile.sqlite/ortho_L18/{z}/{x}/{y}.jpg"
+      ],
+      "attribution": "Naver Labs. True-Ortho Attribution"
+    },
+    "seoul": {
+      "url": "http://192.168.0.11:8080/capabilities/Seoul.json",
+      "type": "vector"
+
+    }
+  },
+  "id": "169f020c-449f-4756-ade6-affd6431895e"
+}

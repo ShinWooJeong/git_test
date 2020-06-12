@@ -1,0 +1,24 @@
+{
+  "name": "wemap-style-test",
+  "version": "0.1.0",
+  "private": true,
+  "description": "mapbox style test",
+  "main": "style_server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ."
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "consolidate": "^0.15.1",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "jayson": "^3.3.0",
+    "json-server": "^0.16.1",
+    "mustache": "^4.0.1",
+    "pug": "^2.0.4",
+    "supervisor": "^0.12.0"
+  }
+}

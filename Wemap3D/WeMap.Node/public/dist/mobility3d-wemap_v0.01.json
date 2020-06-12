@@ -1,0 +1,1834 @@
+{
+  "pitch": 0,
+  "layers": [
+    {
+      "id": "background",
+      "type": "background",
+      "maxzoom": 24,
+      "filter": [
+        "all"
+      ],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "background-color": "rgba(27, 37, 52, 1)"
+      }
+    },
+          {
+      "id": "land",
+      "type": "fill",
+      "source": "seoul",
+      "source-layer": "landcover",
+      "paint": {
+        "fill-color": "rgba(198, 201, 193, 1)"
+      },
+      "layout": {
+        "visibility": "visible"
+      }
+    },
+    {
+      "id": "pier",
+      "type": "fill",
+      "source": "osm",
+      "source-layer": "other_areas",
+      "filter": [
+        "all",
+        [
+          "==",
+          "type",
+          "pier"
+        ]
+      ],
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+        "fill-color": "rgba(198, 201, 193, 1)"
+      }
+    },
+    {
+      "id": "water_areas",
+      "type": "fill",
+      "source": "seoul",
+      "source-layer": "water",
+      "minzoom": 7,
+      "maxzoom": 24,
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "fill-color": "#1B3654"
+      }
+    },
+    {
+      "minzoom": 3,
+      "layout": {
+        "visibility": "none"
+      },
+      "maxzoom": 7,
+      "filter": [
+        "all",
+        [
+          ">",
+          "area",
+          1000000000
+        ]
+      ],
+      "type": "fill",
+      "source": "seoul",
+      "id": "water_areas_z3",
+      "paint": {
+        "fill-color": "rgba(27, 37, 52, 1)"
+      },
+      "source-layer": "water"
+    },
+    {
+      "id": "pier_line",
+      "type": "line",
+      "source": "seoul",
+      "source-layer": "highway_line",
+      "minzoom": 12,
+      "filter": [
+        "all",
+        [
+          "==",
+          "man_made",
+          "pier"
+        ]
+      ],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "rgba(198, 201, 193, 1)",
+        "line-width": {
+          "stops": [
+            [
+              12,
+              2
+            ],
+            [
+              18,
+              7
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "landuse_areas",
+      "type": "fill",
+      "source": "seoul",
+      "source-layer": "landuse",
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "fill-color": {
+          "property": "amenity",
+          "type": "categorical",
+          "default": "transparent",
+          "stops": [
+            [
+              "hospital",
+              "rgba(189, 67, 67, 0.2)"
+            ],
+            [
+              "school",
+              "rgba(107, 73, 38, 0.15)"
+            ],
+            [
+              "college",
+              "rgba(107, 73, 38, 0.15)"
+            ],
+            [
+              "education",
+              "rgba(107, 73, 38, 0.15)"
+            ],
+            [
+              "university",
+              "rgba(107, 73, 38, 0.15)"
+            ],
+            [
+              "residential",
+              "rgba(153, 195, 150, 0.2)"
+            ],
+            [
+              "grassland",
+              "rgba(159, 173, 153, .5)"
+            ],
+            [
+              "forest",
+              "rgba(100, 179, 100, 0.09)"
+            ],
+            [
+              "farm",
+              "rgba(206, 212, 203, 1)"
+            ],
+            [
+              "farmland",
+              "rgba(206, 212, 203, 1)"
+            ],
+            [
+              "orchard",
+              "rgba(206, 212, 203, 1)"
+            ],
+            [
+              "allotments",
+              "rgba(206, 212, 203, 1)"
+            ],
+            [
+              "garden",
+              "rgba(206, 212, 203, 1)"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "landuse_areas_2",
+      "type": "fill",
+      "source": "seoul",
+      "source-layer": "landuse",
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "fill-color": {
+          "property": "landuse",
+          "type": "categorical",
+          "default": "transparent",
+          "stops": [
+            [
+              "hospital",
+              "rgba(189, 67, 67, 0.2)"
+            ],
+            [
+              "school",
+              "rgba(107, 73, 38, 0.15)"
+            ],
+            [
+              "college",
+              "rgba(107, 73, 38, 0.15)"
+            ],
+            [
+              "education",
+              "rgba(107, 73, 38, 0.15)"
+            ],
+            [
+              "university",
+              "rgba(107, 73, 38, 0.15)"
+            ],
+            [
+              "residential",
+              "rgba(153, 195, 150, 0.2)"
+            ],
+            [
+              "grassland",
+              "rgba(159, 173, 153, .5)"
+            ],
+            [
+              "forest",
+              "rgba(100, 179, 100, 0.09)"
+            ],
+            [
+              "farm",
+              "rgba(206, 212, 203, 1)"
+            ],
+            [
+              "farmland",
+              "rgba(206, 212, 203, 1)"
+            ],
+            [
+              "orchard",
+              "rgba(206, 212, 203, 1)"
+            ],
+            [
+              "allotments",
+              "rgba(206, 212, 203, 1)"
+            ],
+            [
+              "garden",
+              "rgba(206, 212, 203, 1)"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "minzoom": 1,
+      "layout": {
+        "visibility": "visible"
+      },
+      "maxzoom": 24,
+      "filter": [
+        "all",
+        [
+          "==",
+          "landuse",
+          "military"
+        ]
+      ],
+      "type": "fill",
+      "source": "seoul",
+      "id": "landuse_areas_military_overlay",
+      "paint": {
+        "fill-color": "rgba(178, 194, 157, 1)",
+        "fill-pattern": "military-fill2"
+      },
+      "source-layer": "landuse"
+    },
+    {
+      "id": "landuse_areas_lines",
+      "type": "line",
+      "source": "seoul",
+      "source-layer": "landuse",
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": {
+          "property": "amenity",
+          "type": "categorical",
+          "default": "transparent",
+          "stops": [
+            [
+              "hospital",
+              "rgba(195, 32, 7, 0.5)"
+            ],
+            [
+              "school",
+              "rgba(105, 74, 35, 0.45)"
+            ],
+            [
+              "college",
+              "rgba(105, 74, 35, 0.45)"
+            ],
+            [
+              "education",
+              "rgba(105, 74, 35, 0.45)"
+            ],
+            [
+              "university",
+              "rgba(105, 74, 35, 0.45)"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "aero_areas",
+      "type": "fill",
+      "source": "seoul",
+      "source-layer": "aeroway_polygon",
+      "minzoom": 12,
+      "filter": [
+        "all",
+        [
+          "==",
+          "aeroway",
+          "aerodrome"
+        ]
+      ],
+      "paint": {
+        "fill-color": "rgba(240, 240, 240, 1)"
+      },
+      "layout": {
+        "visibility": "visible"
+      }
+    },
+    {
+      "id": "aero_apron_areas",
+      "type": "fill",
+      "source": "seoul",
+      "source-layer": "aeroway_polygon",
+      "minzoom": 12,
+      "filter": [
+        "all",
+        [
+          "==",
+          "aeroway",
+          "apron"
+        ]
+      ],
+      "paint": {
+        "fill-color": "rgba(220, 220, 220, 1)"
+      },
+      "layout": {
+        "visibility": "visible"
+      }
+    },
+    {
+      "id": "aero_areas_outlines",
+      "type": "line",
+      "source": "seoul",
+      "source-layer": "aeroway_polygon",
+      "minzoom": 12,
+      "filter": [
+        "all",
+        [
+          "==",
+          "aeroway",
+          "aerodrome"
+        ]
+      ],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "rgba(50, 50, 50, 1)",
+        "line-width": 2
+      }
+    },
+    {
+      "minzoom": 12,
+      "layout": {
+        "visibility": "visible"
+      },
+      "maxzoom": 24,
+      "filter": [
+        "all",
+        [
+          "==",
+          "aeroway",
+          "taxiway"
+        ]
+      ],
+      "type": "line",
+      "source": "seoul",
+      "id": "aero_taxiway_lines",
+      "paint": {
+        "line-color": "rgba(40, 40, 40, 1)",
+        "line-dasharray": [
+          3,
+          1
+        ],
+        "line-width": {
+          "stops": [
+            [
+              12,
+              1
+            ],
+            [
+              18,
+              15
+            ]
+          ]
+        }
+      },
+      "source-layer": "aeroway_line"
+    },
+    {
+      "minzoom": 12,
+      "layout": {
+        "visibility": "visible"
+      },
+      "maxzoom": 24,
+      "filter": [
+        "all",
+        [
+          "==",
+          "aeroway",
+          "runway"
+        ]
+      ],
+      "type": "line",
+      "source": "seoul",
+      "id": "aero_runway_lines",
+      "paint": {
+        "line-color": "rgba(30, 30, 30, 1)",
+        "line-width": {
+          "stops": [
+            [
+              12,
+              1.5
+            ],
+            [
+              18,
+              25
+            ]
+          ]
+        }
+      },
+      "source-layer": "aeroway_line"
+    },
+    {
+      "minzoom": 12,
+      "layout": {
+        "visibility": "visible"
+      },
+      "maxzoom": 24,
+      "filter": [
+        "all",
+        [
+          "==",
+          "aeroway",
+          "apron"
+        ]
+      ],
+      "type": "line",
+      "source": "seoul",
+      "id": "aero_apron_lines",
+      "paint": {
+        "line-width": 2,
+        "line-color": "rgba(100, 100, 100, 1)"
+      },
+      "source-layer": "aeroway_line"
+    },
+    {
+      "minzoom": 10,
+      "layout": {
+        "visibility": "none"
+      },
+      "maxzoom": 20,
+      "filter": [
+        "all",
+        [
+          "==",
+          "admin_level",
+          4
+        ]
+      ],
+      "type": "line",
+      "source": "osm",
+      "id": "state_lines_z10",
+      "paint": {
+        "line-color": "rgba(178, 171, 171, 1)",
+        "line-dasharray": [
+          6,
+          3
+        ],
+        "line-width": 1.5
+      },
+      "source-layer": "admin_lines"
+    },
+    {
+      "id": "state_lines_z2",
+      "type": "line",
+      "source": "osm",
+      "source-layer": "state_lines",
+      "minzoom": 2,
+      "maxzoom": 10,
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+        "line-color": "rgba(178, 171, 171, 1)",
+        "line-dasharray": [
+          6,
+          3
+        ],
+        "line-width": 1.5
+      }
+    },
+    {
+      "id": "road_rail",
+      "type": "line",
+      "source": "seoul",
+      "source-layer": "railway",
+      "filter": [
+        "all",
+        [
+          "in",
+          "railway",
+          "rail"
+        ]
+      ],
+      "layout": {
+        "visibility": "visible",
+        "line-cap": "butt",
+        "line-join": "miter"
+      },
+      "paint": {
+        "line-color": "rgba(146, 143, 143, 1)",
+        "line-width": {
+          "base": 1.4,
+          "stops": [
+            [
+              14,
+              0.4
+            ],
+            [
+              15,
+              0.75
+            ],
+            [
+              20,
+              2
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "road_railhatch",
+      "type": "line",
+      "source": "seoul",
+      "source-layer": "railway",
+      "filter": [
+        "all",
+        [
+          "in",
+          "railway",
+          "rail"
+        ]
+      ],
+      "layout": {
+        "visibility": "visible",
+        "line-cap": "butt",
+        "line-join": "miter"
+      },
+      "paint": {
+        "line-color": "#928F8F",
+        "line-dasharray": [
+          0.2,
+          8
+        ],
+        "line-width": {
+          "base": 1.4,
+          "stops": [
+            [
+              14.5,
+              0
+            ],
+            [
+              15,
+              3
+            ],
+            [
+              20,
+              8
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "road_service",
+      "type": "line",
+      "source": "seoul",
+      "source-layer": "highway_line",
+      "filter": [
+        "all",
+        [
+          "in",
+          "highway",
+          "track",
+          "footway",
+          "cycleway",
+          "path",
+          "service",
+          "pedestrian"
+        ]
+      ],
+      "layout": {
+        "visibility": "visible",
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "rgba(181, 177, 169, 1)",
+        "line-width": {
+          "stops": [
+            [
+              15,
+              1
+            ],
+            [
+              16,
+              4
+            ],
+            [
+              20,
+              11
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "road_residential_case",
+      "type": "line",
+      "source": "seoul",
+      "source-layer": "highway_line",
+      "filter": [
+        "all",
+        [
+          "in",
+          "highway",
+          "residential"
+        ]
+      ],
+      "layout": {
+        "visibility": "visible",
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "#cfcdca",
+        "line-width": {
+          "stops": [
+            [
+              12,
+              0.5
+            ],
+            [
+              13,
+              1
+            ],
+            [
+              14,
+              4
+            ],
+            [
+              20,
+              20
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "road_residential",
+      "type": "line",
+      "source": "seoul",
+      "source-layer": "highway_line",
+      "filter": [
+        "all",
+        [
+          "in",
+          "highway",
+          "residential",
+          "unclassified"
+        ]
+      ],
+      "layout": {
+        "visibility": "visible",
+        "line-cap": "round",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "rgba(216, 213, 207, 1)",
+        "line-width": {
+          "stops": [
+            [
+              13.5,
+              0
+            ],
+            [
+              14,
+              2.5
+            ],
+            [
+              20,
+              18
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "road_secondary_case",
+      "type": "line",
+      "source": "seoul",
+      "source-layer": "highway_line",
+      "filter": [
+        "all",
+        [
+          "in",
+          "highway",
+          "secondary",
+          "tertiary"
+        ]
+      ],
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "rgba(129, 130, 124, 1)",
+        "line-width": {
+          "stops": [
+            [
+              8,
+              1.5
+            ],
+            [
+              10,
+              2
+            ],
+            [
+              20,
+              13
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "road_secondary",
+      "type": "line",
+      "source": "seoul",
+      "source-layer": "highway_line",
+      "filter": [
+        "all",
+        [
+          "in",
+          "highway",
+          "secondary",
+          "tertiary"
+        ]
+      ],
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "rgba(149, 150, 143, 1)",
+        "line-width": {
+          "stops": [
+            [
+              6.5,
+              0
+            ],
+            [
+              8,
+              0.5
+            ],
+            [
+              10,
+              1.5
+            ],
+            [
+              20,
+              9
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "road_trunk_case",
+      "type": "line",
+      "source": "seoul",
+      "source-layer": "highway_line",
+      "filter": [
+        "all",
+        [
+          "in",
+          "highway",
+          "primary",
+          "trunk",
+          "trunk_link",
+          "motorway_link",
+          "primary_link"
+        ]
+      ],
+      "layout": {
+        "visibility": "visible",
+        "line-join": "round",
+        "line-cap": "butt"
+      },
+      "paint": {
+        "line-color": "rgba(129, 130, 124, 1)",
+        "line-width": {
+          "stops": [
+            [
+              5,
+              0.4
+            ],
+            [
+              6,
+              0.7
+            ],
+            [
+              7,
+              1.5
+            ],
+            [
+              10,
+              2
+            ],
+            [
+              20,
+              14
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "road_trunk",
+      "type": "line",
+      "source": "seoul",
+      "source-layer": "highway_line",
+      "filter": [
+        "all",
+        [
+          "in",
+          "highway",
+          "primary",
+          "trunk",
+          "trunk_link",
+          "motorway_link",
+          "primary_link"
+        ]
+      ],
+      "layout": {
+        "visibility": "visible",
+        "line-join": "round",
+        "line-cap": "round"
+      },
+      "paint": {
+        "line-color": "rgba(149, 150, 143, 1)",
+        "line-width": {
+          "stops": [
+            [
+              5,
+              0
+            ],
+            [
+              7,
+              0.8
+            ],
+            [
+              10,
+              1.5
+            ],
+            [
+              20,
+              11
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "roads_subways",
+      "type": "line",
+      "source": "seoul",
+      "source-layer": "railway",
+      "minzoom": 14,
+      "filter": [
+        "all",
+        [
+          "in",
+          "railway",
+          "subway"
+        ]
+      ],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "rgba(153, 153, 153, 1)",
+        "line-width": {
+          "stops": [
+            [
+              14,
+              0.7
+            ],
+            [
+              18,
+              2
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "road_motorway_case",
+      "type": "line",
+      "source": "seoul",
+      "source-layer": "highway_line",
+      "filter": [
+        "all",
+        [
+          "in",
+          "highway",
+          "motorway"
+        ]
+      ],
+      "layout": {
+        "visibility": "visible",
+        "line-cap": "butt",
+        "line-join": "round"
+      },
+      "paint": {
+        "line-color": "rgba(73, 74, 69, 1)",
+        "line-width": {
+          "stops": [
+            [
+              6,
+              0.7
+            ],
+            [
+              7,
+              1.75
+            ],
+            [
+              10,
+              2.5
+            ],
+            [
+              20,
+              18
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "road_motorway",
+      "type": "line",
+      "source": "seoul",
+      "source-layer": "highway_line",
+      "minzoom": 7,
+      "filter": [
+        "all",
+        [
+          "in",
+          "highway",
+          "motorway"
+        ]
+      ],
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "rgba(118, 121, 114, 1)",
+        "line-width": {
+          "stops": [
+            [
+              7,
+              1
+            ],
+            [
+              10,
+              1.7
+            ],
+            [
+              20,
+              14
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "minzoom": 4,
+      "layout": {
+        "visibility": "visible"
+      },
+      "maxzoom": 7,
+      "filter": [
+        "all",
+        [
+          ">",
+          "min_zoom",
+          5
+        ]
+      ],
+      "type": "line",
+      "source": "seoul",
+      "id": "roads_motorway_z4_minzoom",
+      "paint": {
+        "line-color": "rgba(149, 150, 143, 1)",
+        "line-width": {
+          "stops": [
+            [
+              4,
+              0.5
+            ],
+            [
+              7,
+              1
+            ]
+          ]
+        }
+      },
+      "source-layer": "highway_line"
+    },
+    {
+      "minzoom": 4,
+      "layout": {
+        "visibility": "visible"
+      },
+      "maxzoom": 7,
+      "filter": [
+        "all",
+        [
+          "<=",
+          "min_zoom",
+          5
+        ]
+      ],
+      "type": "line",
+      "source": "seoul",
+      "id": "road_motorway_z4",
+      "paint": {
+        "line-color": "rgba(73, 74, 69, 1)",
+        "line-width": {
+          "stops": [
+            [
+              4,
+              0.5
+            ],
+            [
+              7,
+              1
+            ]
+          ]
+        }
+      },
+      "source-layer": "highway_line"
+    },
+    {
+      "minzoom": 14,
+      "layout": {
+        "text-line-height": 1.2,
+        "text-size": {
+          "stops": [
+            [
+              14,
+              8
+            ],
+            [
+              15,
+              14
+            ]
+          ]
+        },
+        "text-ignore-placement": false,
+        "text-font": [
+          "Noto Sans Regular"
+        ],
+        "icon-allow-overlap": true,
+        "symbol-placement": "line",
+        "visibility": "visible",
+        "icon-optional": false,
+        "text-field": "{name}"
+      },
+      "maxzoom": 24,
+      "filter": [
+        "!=",
+        "highway",
+        "subway"
+      ],
+      "type": "symbol",
+      "source": "seoul",
+      "id": "label_road_name",
+      "paint": {
+        "text-halo-color": "rgba(98, 117, 98, 1)",
+        "text-halo-width": 0,
+        "text-color": "rgba(30, 30, 32, 1)"
+      },
+      "source-layer": "highway_line"
+    },
+    {
+      "minzoom": 10,
+      "layout": {
+        "visibility": "none"
+      },
+      "maxzoom": 20,
+      "filter": [
+        "all",
+        [
+          "==",
+          "admin_level",
+          2
+        ]
+      ],
+      "type": "line",
+      "source": "osm",
+      "id": "admin_countrylines_z10",
+      "paint": {
+        "line-color": "rgba(182, 195, 183, 1)",
+        "line-width": {
+          "stops": [
+            [
+              0,
+              0.5
+            ],
+            [
+              7,
+              3
+            ]
+          ]
+        }
+      },
+      "source-layer": "admin_lines"
+    },
+    {
+      "id": "admin_countrylines_z0",
+      "type": "line",
+      "source": "osm",
+      "source-layer": "country_lines",
+      "minzoom": 0,
+      "maxzoom": 10,
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+        "line-color": "rgba(182, 195, 183, 1)",
+        "line-width": {
+          "stops": [
+            [
+              0,
+              0.5
+            ],
+            [
+              7,
+              3
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "admin_countrylinesdisputed",
+      "type": "line",
+      "source": "osm",
+      "source-layer": "country_lines_disputed",
+      "minzoom": 0,
+      "maxzoom": 20,
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+        "line-color": "rgba(182, 195, 183, 1)",
+        "line-width": {
+          "stops": [
+            [
+              0,
+              0.5
+            ],
+            [
+              7,
+              3
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "minzoom": 14,
+      "layout": {
+        "text-field": "{name}",
+        "text-font": [
+          "Open Sans Regular"
+        ],
+        "text-size": 10,
+        "text-transform": "uppercase",
+        "text-letter-spacing": 0.5,
+        "visibility": "none"
+      },
+      "maxzoom": 20,
+      "filter": [
+        "all",
+        [
+          "==",
+          "admin_level",
+          8
+        ]
+      ],
+      "type": "symbol",
+      "source": "osm",
+      "id": "city_labels_z14",
+      "paint": {
+        "text-color": "rgba(34, 34, 34, 1)",
+        "text-halo-color": "rgba(198, 201, 193, 1)",
+        "text-halo-width": 1,
+        "text-halo-blur": 1
+      },
+      "source-layer": "admin_lines"
+    },
+    {
+      "minzoom": 12,
+      "layout": {
+        "text-field": "{name}",
+        "text-font": [
+          "Open Sans Regular"
+        ],
+        "text-size": 10,
+        "text-transform": "uppercase",
+        "text-letter-spacing": 0.5,
+        "visibility": "none"
+      },
+      "maxzoom": 14,
+      "filter": [
+        "all",
+        [
+          "==",
+          "featurecla",
+          "Populated place"
+        ]
+      ],
+      "type": "symbol",
+      "source": "osm",
+      "id": "city_labels_z12",
+      "paint": {
+        "text-color": "rgba(34, 34, 34, 1)",
+        "text-halo-color": "rgba(198, 201, 193, 1)",
+        "text-halo-width": 1,
+        "text-halo-blur": 1
+      },
+      "source-layer": "populated_places"
+    },
+    {
+      "minzoom": 6,
+      "layout": {
+        "text-field": "{name}",
+        "text-font": [
+          "Open Sans Regular"
+        ],
+        "text-size": 10,
+        "visibility": "none"
+      },
+      "maxzoom": 12,
+      "filter": [
+        "all",
+        [
+          "==",
+          "featurecla",
+          "Populated place"
+        ]
+      ],
+      "type": "symbol",
+      "source": "osm",
+      "id": "city_labels_z6",
+      "paint": {
+        "text-color": "rgba(34, 34, 34, 1)",
+        "text-halo-color": "rgba(198, 201, 193, 1)",
+        "text-halo-width": 1,
+        "text-halo-blur": 1
+      },
+      "source-layer": "populated_places"
+    },
+    {
+      "minzoom": 4,
+      "layout": {
+        "text-field": "{name}",
+        "text-font": [
+          "Open Sans Bold Italic"
+        ],
+        "text-size": {
+          "stops": [
+            [
+              4,
+              7
+            ],
+            [
+              10,
+              16
+            ]
+          ]
+        },
+        "visibility": "none"
+      },
+      "maxzoom": 10,
+      "filter": [
+        "all",
+        [
+          "==",
+          "scalerank",
+          2
+        ]
+      ],
+      "type": "symbol",
+      "source": "osm",
+      "id": "state_labels",
+      "paint": {
+        "text-color": "rgba(145, 145, 158, 1)",
+        "text-halo-color": "rgba(198, 201, 193, 1)",
+        "text-halo-width": 1,
+        "text-halo-blur": 1
+      },
+      "source-layer": "state_label_points"
+    },
+    {
+      "minzoom": 10,
+      "layout": {
+        "text-field": "{name}",
+        "text-font": [
+          "Open Sans Bold"
+        ],
+        "text-size": 10,
+        "text-transform": "uppercase",
+        "visibility": "none"
+      },
+      "maxzoom": 20,
+      "filter": [
+        "all",
+        [
+          "==",
+          "featurecla",
+          "Admin-1 capital"
+        ]
+      ],
+      "type": "symbol",
+      "source": "osm",
+      "id": "statecapital_labels_z10",
+      "paint": {
+        "text-color": "rgba(68, 51, 85, 1)",
+        "text-halo-color": "rgba(198, 201, 193, 1)",
+        "text-halo-width": 1,
+        "text-halo-blur": 1
+      },
+      "source-layer": "populated_places"
+    },
+    {
+      "minzoom": 4,
+      "layout": {
+        "text-field": "{name}",
+        "text-font": [
+          "Open Sans Bold"
+        ],
+        "text-size": {
+          "stops": [
+            [
+              4,
+              7
+            ],
+            [
+              10,
+              10
+            ]
+          ]
+        },
+        "visibility": "none"
+      },
+      "maxzoom": 10,
+      "filter": [
+        "all",
+        [
+          "==",
+          "featurecla",
+          "Admin-1 capital"
+        ]
+      ],
+      "type": "symbol",
+      "source": "osm",
+      "id": "statecapital_labels_z4",
+      "paint": {
+        "text-color": "rgba(68, 51, 85, 1)",
+        "text-halo-color": "rgba(198, 201, 193, 1)",
+        "text-halo-width": 1,
+        "text-halo-blur": 1
+      },
+      "source-layer": "populated_places"
+    },
+    {
+      "minzoom": 10,
+      "layout": {
+        "text-field": "{name}",
+        "text-font": [
+          "Open Sans Bold"
+        ],
+        "text-size": 11,
+        "text-transform": "uppercase",
+        "visibility": "none"
+      },
+      "maxzoom": 20,
+      "filter": [
+        "all",
+        [
+          "==",
+          "featurecla",
+          "Admin-0 capital"
+        ]
+      ],
+      "type": "symbol",
+      "source": "osm",
+      "id": "capital_labels_z10",
+      "paint": {
+        "text-color": "rgba(68, 51, 85, 1)",
+        "text-halo-color": "rgba(198, 201, 193, 1)",
+        "text-halo-width": 1,
+        "text-halo-blur": 1
+      },
+      "source-layer": "populated_places"
+    },
+    {
+      "minzoom": 3,
+      "layout": {
+        "text-field": "{name}",
+        "text-font": [
+          "Open Sans Bold"
+        ],
+        "text-size": {
+          "stops": [
+            [
+              3,
+              9
+            ],
+            [
+              10,
+              11
+            ]
+          ]
+        },
+        "visibility": "none"
+      },
+      "maxzoom": 10,
+      "filter": [
+        "all",
+        [
+          "==",
+          "featurecla",
+          "Admin-0 capital"
+        ]
+      ],
+      "type": "symbol",
+      "source": "osm",
+      "id": "capital_labels_z3",
+      "paint": {
+        "text-color": "rgba(68, 51, 85, 1)",
+        "text-halo-color": "rgba(198, 201, 193, 1)",
+        "text-halo-width": 1,
+        "text-halo-blur": 1
+      },
+      "source-layer": "populated_places"
+    },
+    {
+      "minzoom": 3,
+      "layout": {
+        "text-field": "{sr_subunit}",
+        "text-font": [
+          "Open Sans Bold"
+        ],
+        "text-size": {
+          "stops": [
+            [
+              3,
+              11
+            ],
+            [
+              7,
+              13
+            ]
+          ]
+        },
+        "visibility": "none"
+      },
+      "maxzoom": 7,
+      "filter": [
+        "all",
+        [
+          "==",
+          "scalerank",
+          0
+        ]
+      ],
+      "type": "symbol",
+      "source": "osm",
+      "id": "country_labels",
+      "paint": {
+        "text-color": "rgba(68, 51, 85, 1)",
+        "text-halo-color": "rgba(198, 201, 193, 1)",
+        "text-halo-width": 1,
+        "text-halo-blur": 5
+      },
+      "source-layer": "country_label_points"
+    },
+    {
+      "minzoom": 0,
+      "layout": {
+        "visibility": "visible"
+      },
+      "maxzoom": 24,
+      "filter": [
+        "all",
+        [
+          "!has",
+          "height1"
+        ]
+      ],
+      "type": "fill-extrusion",
+      "source": "seoul",
+      "id": "building_tilt_na",
+      "paint": {
+        "fill-extrusion-color": "rgba(166, 169, 162, 0.9)",
+        "fill-extrusion-height": 5,
+        "fill-extrusion-base": 0,
+        "fill-extrusion-opacity": 0.9
+      },
+      "source-layer": "building"
+    },
+    {
+      "minzoom": 0,
+      "layout": {
+        "visibility": "none"
+      },
+      "maxzoom": 24,
+      "filter": [
+        "any",
+        [
+          "has",
+          "height"
+        ]
+      ],
+      "type": "fill-extrusion",
+      "source": "seoul",
+      "id": "building_tilt",
+      "paint": {
+        "fill-extrusion-color": "rgba(166, 169, 162, 0.9)",
+        "fill-extrusion-height": {
+          "property": "height1",
+          "type": "identity"
+        },
+        "fill-extrusion-base": 0,
+        "fill-extrusion-opacity": 0.9
+      },
+      "source-layer": "building"
+    },
+        {
+      "minzoom": 12,
+      "layout": {
+        "icon-image": "topo_heliport-15",
+        "icon-size": 1,
+        "icon-optional": false,
+        "visibility": "none"
+      },
+      "maxzoom": 24,
+      "filter": [
+        "all",
+        [
+          "==",
+          "type",
+          "helipad"
+        ]
+      ],
+      "type": "symbol",
+      "source": "osm",
+      "id": "icon_helipad",
+      "paint": {
+        "icon-color": "rgba(0, 0, 0, 1)"
+      },
+      "source-layer": "transport_points"
+    },
+    {
+      "minzoom": 12,
+      "layout": {
+        "icon-image": "topo_airport-15",
+        "icon-size": 1,
+        "icon-optional": false,
+        "visibility": "none",
+        "text-field": "{name}",
+        "text-font": [
+          "Open Sans Bold"
+        ],
+        "text-size": 10,
+        "text-offset": [
+          0,
+          2
+        ]
+      },
+      "maxzoom": 24,
+      "filter": [
+        "all",
+        [
+          "==",
+          "type",
+          "aerodrome"
+        ]
+      ],
+      "type": "symbol",
+      "source": "osm",
+      "id": "icon_airport",
+      "paint": {
+        "icon-color": "rgba(0, 0, 0, 1)",
+        "text-color": "rgba(34, 34, 34, 1)",
+        "text-halo-color": "rgba(255, 255, 255, 1)",
+        "text-halo-width": 0.5
+      },
+      "source-layer": "transport_areas"
+    },
+    {
+      "minzoom": 6,
+      "layout": {
+        "text-line-height": 1.2,
+        "text-size": {
+          "stops": [
+            [
+              6,
+              9
+            ],
+            [
+              14,
+              9
+            ],
+            [
+              15,
+              10
+            ]
+          ]
+        },
+        "icon-text-fit": "width",
+        "icon-image": "rectangle-6",
+        "icon-rotation-alignment": "viewport",
+        "icon-text-fit-padding": [
+          0,
+          10,
+          0,
+          10
+        ],
+        "text-ignore-placement": false,
+        "text-font": [
+          "Miriam Libre Regular"
+        ],
+        "icon-rotate": 0,
+        "icon-allow-overlap": false,
+        "symbol-placement": "line",
+        "visibility": "none",
+        "icon-optional": true,
+        "text-rotation-alignment": "viewport",
+        "icon-size": 1,
+        "text-field": "{ref}",
+        "text-max-width": 1
+      },
+      "maxzoom": 24,
+      "filter": [
+        "all",
+        [
+          "==",
+          "type",
+          "motorway"
+        ],
+        [
+          "!=",
+          "ref",
+          ""
+        ]
+      ],
+      "type": "symbol",
+      "source": "osm",
+      "id": "label_motorway_shield",
+      "paint": {
+        "text-color": "#333",
+        "icon-color": "rgba(158, 22, 22, 1)",
+        "icon-halo-color": "rgba(199, 63, 63, 1)",
+        "icon-opacity": 1,
+        "text-translate-anchor": "viewport",
+        "icon-translate-anchor": "viewport"
+      },
+      "source-layer": "transport_lines"
+    },
+    {
+      "id": "park",
+      "source": "seoul",
+      "source-layer": "park",
+      "layout": {
+        "visibility": "none"
+      },
+      "minzoom": 8,
+      "maxzoom": 20,
+      "type": "fill",
+      "paint": {
+        "fill-color": "#a5d6a7",
+        "fill-opacity": 0.2
+      }
+    },
+    {
+      "id": "highway_polygon",
+      "source": "seoul",
+      "source-layer": "highway_polygon",
+      "layout": {
+        "visibility": "none"
+      },
+      "minzoom": 12,
+      "maxzoom": 20,
+      "type": "fill",
+      "paint": {
+        "fill-color": "#e91e63",
+        "fill-opacity": 0.2
+      }
+    },
+    {
+      "id": "poi_polygon",
+      "source": "seoul",
+      "source-layer": "poi_polygon",
+      "layout": {
+        "visibility": "none"
+      },
+      "minzoom": 13,
+      "maxzoom": 20,
+      "type": "fill",
+      "paint": {
+        "fill-color": "#ffd54f",
+        "fill-opacity": 0.2
+      }
+    },
+    {
+      "id": "poi_point",
+      "source": "seoul",
+      "source-layer": "poi_point",
+      "layout": {
+        "visibility": "none"
+      },
+      "minzoom": 13,
+      "maxzoom": 20,
+      "type": "circle",
+      "paint": {
+        "circle-radius": 3,
+        "circle-color": "#ffc107"
+      }
+    },
+    {
+      "id": "peak",
+      "source": "seoul",
+      "source-layer": "peak",
+      "layout": {
+        "visibility": "visible"
+      },
+      "minzoom": 10,
+      "maxzoom": 20,
+      "type": "circle",
+      "paint": {
+        "circle-radius": 3,
+        "circle-color": "#a5d6a7"
+      }
+    }
+  ],
+  "sprite": "https://go-spatial.github.io/carto-assets/spritesets/osm_tegola_spritesheet",
+  "glyphs": "https://api.maptiler.com/fonts/{fontstack}/{range}.pbf?key=BSklNVq1LTGzZUox0u1m",
+  "created": "2017-01-04T21:12:33.904Z",
+  "name": "mobility3d-wemap",
+  "bearing": 0,
+  "metadata": {
+    "mapbox:autocomposite": false,
+    "mapbox:type": "template",
+    "openmaptiles:version": "3.x",
+    "maputnik:renderer": "mbgljs",
+    "inspect": true,
+    "editor": "WEMAP"
+  },
+  "owner": "",
+  "zoom": 12,
+  "center": [
+    127.100833,
+    37.511905
+  ],
+  "version": 8,
+  "sources": {
+    "osm": {
+      "type": "vector",
+      "url": "https://osm-lambda.tegola.io/v1/capabilities/osm.json"
+    },
+    "seoul": {
+      "url": "http://192.168.0.11:8080/capabilities/Seoul.json",
+      "type": "vector"
+    },
+    "seoul-lod2": {
+     "type": "meshlod2",
+     "tiles": ["http://192.168.0.11:3009/tile.sqlite/lod2/{z}/{x}/{y}.wgl"],      
+     "minzoom": 13,
+     "maxzoom": 16,  
+     "attribution": "WEMAP LOD2 Building Attribution"
+   }
+  },
+  "id": "829a90c0-0487-4058-9854-d58e9e18a293"
+}
