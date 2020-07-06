@@ -1,0 +1,123 @@
+PostgreSQL install 하기:#
+여기서 다운로드(12.3 최신버전) : https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
+여길 보면서 따라함 : https://dora-guide.com/postgresql-install/
+
+
+
+
+자주쓰는 블로그
+정학님이 참고하라고 추천해주신 블로그 :
+https://medium.com/aha-official/%EC%95%84%ED%95%98-rest-api-%EC%84%9C%EB%B2%84-%EA%B0%9C%EB%B0%9C-3-daa2cce9d844
+Select, Insert, Put, Delete 방법:
+https://blog.logrocket.com/setting-up-a-restful-api-with-node-js-and-postgresql-d96d6fc892d8/
+https://stackoverrun.com/ko/q/5484075
+노드-포스트그리스 공홈...? :
+https://node-postgres.com/
+
+
+
+
+815-20206-30-183-44.png
+다운받은 sql의 admin을 켜는 방법은 설치한 경로에서 들어가서 어드민 파일을 누르면 된다.
+
+875-20206-30-180-14.png
+postgres 에서는 float data type이 real 이라는 것을 기억해두자.
+
+276-20206-30-181-32.png
+longitude와 latitude은 not Null을 체크해야한다.
+
+259-20206-30-1750-5.png
+location 이라는 데이터베이스를 만들었고,
+location_schema 를 만들었다
+location_table 이라는 테이블을 생성
+columns 만들었다.
+
+show search_path; 를 하면 밑에 테이블에 우리가 만든 스키마인, location_schema 가 떠야한다.
+
+87-20206-30-1810-14.png
+윗 부분은 오류가 떴을 때 해결한 방법이고 (이 블로그를 참고했다 https://m.blog.naver.com/PostView.nhn?blogId=eple_freeweb&logNo=221316996821&proxyReferer=https:%2F%2Fwww.google.com%2F)
+아래 부분의 문장들은 자주 사용할 것들이니 기억해두자!!
+컬럼에 대한 명령문들은 :: https://brownbears.tistory.com/162
+로우에 대한 명령문들은 :: https://blog.gaerae.com/2015/10/postgresql-insert-update-returning.html
+
+
+
+
+
+213-20207-1-1351-4.png
+GET을 사용했음!!! 결과는
+656-20207-1-1351-41.png
+어제 디비에 넣은 것 그대로!
+
+참고로,, npm install pg pg-hstore --save 한듯...?
+sequelize 방법으로 처음에 https://www.enterprisedb.com/postgres-tutorials/how-quickly-build-api-using-nodejs-postgresql
+postgresql 공홈을 따라했어서 좀 헤맸는데,,,
+그냥 https://medium.com/@dannibla/connecting-nodejs-postgresql-f8967b9f5932 여기 따라하는 게 가장 간편한 방법인듯!!!
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+그 전에!! 포스트맨을 가지고 서버를 확인하자!!
+GET 방식은 간단하니까 패스하고!
+POST 방식의 경우 값을 받아와야하는 경우니까, 포스트맨에서 클라이언트처럼 설정을 해줘야한다.
+503-20207-1-1743-29.png
+해더에서 저렇게 저렇게~
+
+93-20207-1-1747-41.png
+바디에서 제이슨으로 설정해주고, 클라이언트에서 보낼 값을 제이슨형태로 해주면
+밑에 결과값이 뜬다!! 서버에서 쿼리로 값을 추가해주고 디비테이블이 뜨는 주소로 리다이렉트 해주는 코드를 써서 결과가 뜬다!!
+
+316-20207-1-1750-15.png
+콘솔창에서도 성공하면 받은 값을 띄우도록 했는데 다행히 잘 나온다!!
+
+post 방식으로 정보를 추가해서 날릴 때, 기존에 값이 있는지 확인해서 없으면 추가하고 있으면 안 하는 것을 구현하고 싶은데...
+일단 PK를 테이블에 추가하려고 했더니...
+
+        그냥 PK를 만들기: add
+            alter table 테이블명 add primary key (컬럼이름)
+            ALTER TABLE [location_schema].[location_table_past] ADD CONSTRAINT [loc_id] PRIMARY KEY (location);
+                            스키마이름          테이블이름                       PK이름..?              기본컬럼이름
+        단, 데이터가 들어가 있는 경우에는 데이터간에 중복이 있어서는 안된다. 
+
+
+        프라이머리 키를 지우기: drop   
+            alter table 테이블명 drop primary key;
+
+        테이블 생성 Syntax : 
+
+        CREATE TABLE table_name ( [
+           column_name1 data_type [ COLLATE collation ] [ column_constraint [ ... ] ]
+          column_name2 data_type [ COLLATE collation ] [ column_constraint [ ... ] ]
+          column_name3 data_type [ COLLATE collation ] [ column_constraint [ ... ] ]
+          …
+        ] )
+
+                    CREATE TABLE films (
+                        code        char(5) NOT NULL,
+                        title       varchar(40),
+                        did         integer,
+                        date_prod   date,
+                        kind        varchar(10),
+                        len         interval hour to minute,
+                        CONSTRAINT production UNIQUE(date_prod) /// production 테이블에서 4 번쨰 칼럼인 data_prod 컬럼이 중복 없이 유일한 UNIQUE조건을 만족해야함.
+                    );
+                        ALTER TABLE [location_schema].[location_table_past] ADD CONSTRAINT ["uniqueLocationName"] UNIQUE [(location)];
+                                        스키마 이름         테이블이름                          무슨이름이지...?             기본컬럼이름 괄호에 넣어줘야함.
+이런식의 쿼리가 쓰인다고 한다. 하지만 나는 GUI로 했는데,
+
+615-20207-3-1523-59.png
+constraints를 우클릭하고 create를 눌렀더니 프라이머리 키가 있어서 ,, 캡쳐는 못했는데 키 이름을 만들고, 기본컬럼을 고르라길래 location을 골랐다.
+
+근데!!!!
+755-20207-3-1525-47.png
+지금 정리하려고 다시 눌렀더니 Unique constraint가 생긴 것 같다! 프라이머리 키는 안 보인다!!!! 오잉오잉
+
+945-20207-3-1528-9.png
+general 에서는 이름을 정해야하고,,, 근데 무슨 이름인지 모르겠다. 프라이머리 키도, 이거 유니크 설정도 따로 테이블이 생기는 것 같진 않은데...
+definition 에서는 칼럼을 정해야한다... 나는 로케이션으로 정했다.
+
+176-20207-3-1535-24.png
+여튼 설정을 마치고 세이브를 누르고 나니 이렇게 표에도 티가 나고, constraints 에서도 PK 와 UNIQUE가 설정됐다고 뜬다!
+
