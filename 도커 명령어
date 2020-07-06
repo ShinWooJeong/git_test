@@ -1,0 +1,282 @@
+명령어   https://taeu.github.io/tech/%EB%8F%84%EC%BB%A4-Windows-%ED%99%98%EA%B2%BD%EC%97%90%EC%84%9C-Docker-%ED%99%9C%EC%9A%A9/
+
+
+pull : 도커 이미지 다운로드
+images: 도커 이미지 list 보기
+run: 도커 적재 (stop id 하면 ps stop)
+run -it python: 파워쉘에서 바로 파이썬이 실행됨.  -it  옵션은 표준 입출력을 이용해 컨테이너에 명령어를 입력할 수 있게 해줌.
+create: 컨테이너를 생성만 하고 컨테이너로 들어가지 않음.(docker create -it --name mycentos centos:7)
+start: 컨테이너 시작 (docker start mycentos(컨테이너 이름))
+attach: 정지된 도커 프로세스 탑재(끝에 컨테이너 아이디나 이름을 붙이면 특정 컨테이너로 재접속함)
+ 
+ 
+ps: 도커 프로세스 상태 확인, 정지되지 않은 컨테이너만 출력
+ps -a: 컨네이너 목록 전부 확인
+inspect: 컨테이너 전체 아이디 확인 (docker inspect mycentos | grep Id)
+docker port [컨테이너 이름] : 컨테이너가 사용중인 호스트의 포트가 출력
+ 
+ 
+logs: 도커 프로세스의 로그 확인
+tag: 도커 이미지 변경
+commit: 도커 프로세스를 스냅샷 형태로 이미지로 저장
+	docker commit -m “client install” centos7.v1 centos7_image:0.0.2
+                                      -m “메시지”          컨테이너명   이미지명       : 태그
+	보통 메시지엔 무슨 내용이 변경되었는지, 태그는 버전..?같은것에 유용
+login : 도커 이미지 Push를 위해 저장소에 로그인 관련 이슈
+push: 도커 저장소(registry)에 image upload
+tag 로 push할 이미지를 /<이미지 이름="">:<태그> 로 만들고
+docker push /<이미지 이름="">:<태그>
+ 
+docker diff (컨테이너ID/이름): 어떤 컨테이너와 이 컨테이너의 부모 이미지 간의 파일 변경사항을                                         확인할 수 있는 명령어를 제공합니다. git diff 명령어로 프로젝트의 변경사항을 확인하듯이, docker diff 명령어로 부모 이미지와 여기서 파생된 컨테이너의 파일 시스템 간의 변경사항을 확인할 수 있습니다.
+ 
+rm (컨테이너ID): 특정 컨테이너 삭제(실행중인 컨테이너는 안됨)
+rm (컨테이너ID) -f: 특정 컨테이너를 강제로 삭제(실행중인 컨테이너도 지움)
+docker container prune : 모든 컨테이너 삭제
+rmi: 시스템에 저장된 도커 이미지 삭제 , images id로 (rm)
+		(종료상태를 포함한) 이미지에서 파생된 컨테이너가 하나라도 있으면 이미지는 삭제 못함.
+save: 도커 이미지를 파일로 저장
+load: 파일로 저장된 도커 이미지 시스템에 저장
+prune: 도커 데몬이 사용하는 시스템 purge
+cp: Container 내부의 파일을 Host로 복사    
+exec: 도커 컨테이너 안쪽에 명령어를 전송할 때 사용
+		docker exec -it [134adb2ba12 혹은 my-container] /bin/bash
+		명령어를 /bin/bash로 주면 도커 컨테이너 안쪽의 bash 쉘이 실행된다.
+		여기서는 -i -t 옵션을 추가해 /bin/bash 를 상호입출력이 가능한 형태로 exec사용.
+		만약 옵션을 추가하지 않고 단순히 exec만 쓰면 컨테이너 내부에서 실행한 명령만 반환.
+ 
+root@3b800eba0a8e:/# ifconfig    해당 컨테이너의 네트워크 인터페이스를 확인
+ech $MYSQL_ROOT_PASSWORD 
+ (또는 cmd에서    root@75637d08945c:/# echo $MYSQL_ROOT_PASSWORD)
+	echo 명령어를 사용하려면 상호 입출력이 가능한 배시 셸을 사용할 수 있는 환경 필요.
+ 
+exit: 도커 컨테이너를 정지하면서  빠져나옴
+ctrl + D : 도커 컨테이너를 정지하면서  빠져나옴
+ctrl + P, Q : 컨테이너의 셸에서만 빠져나오기 때문에 컨테이너가 정지하지 않음.
+ 
+ 
+docker run --net=NETWORK_TYPE .....  : 네트워크 방식 바꿈.
+docker run --net=host httpd (컨테이너 이름ex.web01) : 컨테이너 생성때 네트워크 설정
+docker logs 명령어에서 지원하는 옵션들
+-tail : 마지막 줄만 가져오기
+--since [epoch time] : 유닉스 시간이후의 로그를 확인
+-t : 타임스탬프 표시
+-f : 실시간으로 로그르 출력
+ 
+ 
+ 
+docker --format “table {{.ID}|t{{.Status}}|t{{.Image}}|t{{.Name}}”
+--format 옵션에  {{.ID}|t{{.Status}} 와 같은 Go템플릿을 입력해서 원하는 정보만 출력할 수 있다. |t는 챕을 의미하며, |t를 끼워넣어 좀 더 깔끔하게 출력가능
+ 
+docker stop $(docker ps -a -q)    :   실행상태 관계없이 모든 컨테이너 정지
+docker rm $(docker ps -a -q)      :    실행상태 관계없이 모든 컨테이너 정지
+ 
+ 
+ 
+ 
+echo : 리눅스에서 환경변수를 확인하는 명령어
+	# echo ${ENVIRONMENT_NAME}
+	root@a92efbb:/# echo #MYSQL_ROOT_PASSWORD       
+ 
+ 
+
+옵션
+설명
+-d
+detached mode 흔히 말하는 백그라운드 모드
+-p
+호스트와 컨테이너의 포트를 연결 (포워딩) 
+-x
+POST 메서드를 사용하도록 설정합니다.
+$ curl -X POST http://127.0.0.1:4243/images/create?fromImage=nginx:latest
+이미지를 받는 Remote API는 /images/create?fromImage=<이미지 이름>:<태그>
+-v
+호스트와 컨테이너의 디렉토리를 연결 (마운트)
+-e
+컨테이너 내에서 사용할 환경변수 설정
+–-name
+컨테이너 이름 설정
+docker rename angry_morse my_constainer(이름변경)
+–rm
+프로세스 종료시 컨테이너 자동 제거
+-it
+-i와 -t를 동시에 사용한 것으로 터미널 입력을 위한 옵션
+-i  =  상호입출력                      -t  =  tty 활성화해서 bash셸 사용
+–link
+컨테이너 연결 [컨테이너명:별칭]/// docker run 처럼 컨테이너를 만들때 연결해야하는듯 하다.
+
+
+
+docker diff [컨테이너 아이디/이름]: 부모와 차일드 이미지 차이가 뜸.
+A는 ADD, C는 Change, D는 Delete를 의미
+위에 뜨는 디렉토리 같은 것은 예제 그대로 따라하지 말고 항상 확인해보고 하기.
+
+Usage:  docker image COMMAND
+                                    Commands:
+build       Build an image from a Dockerfile
+ 			history     Show the history of an image
+ 			import      Import the contents from a tarball to create a filesystem image
+ 			inspect     Display detailed information on one or more images
+load        Load an image from a tar archive or STDIN
+ls          List images
+prune       Remove unused images
+  			pull        Pull an image or a repository from a registry
+  			push        Push an image or a repository to a registry
+rm          Remove one or more images
+ 			save        Save one or more images to a tar archive (streamed to STDOUT by default)
+ 			tag         Create a tag TARGET_IMAGE that refers to SOURCE_IMAGE
+
+
+
+
+https://zzsza.github.io/development/2017/12/04/linux-1/
+리눅스에 대하여… 한 번 읽어보기
+-----------------------------------------------------------우분투셸에서---------------------------------------------------------------------
+
+shinwoojeong@ShinWooJeong:~$ cd trytry
+shinwoojeong@ShinWooJeong:~/trytry$ mkdir package
+shinwoojeong@ShinWooJeong:~/trytry$
+shinwoojeong@ShinWooJeong:~/trytry$
+shinwoojeong@ShinWooJeong:~/trytry$ ls -al
+total 28
+drwxr-xr-x 5 shinwoojeong shinwoojeong 4096 Jun  8 17:12 .
+drwxr-xr-x 8 shinwoojeong shinwoojeong 4096 Jun  8 16:05 ..
+-rw-r--r-- 1 shinwoojeong shinwoojeong   75 Jun  5 18:52 Dockerfile
+-rw-r--r-- 1 shinwoojeong shinwoojeong  811 Jun  8 13:48 docker-compose.yml
+drwxr-xr-x 2 shinwoojeong shinwoojeong 4096 Jun  8 13:20 docker-config
+drwxr-xr-x 3 shinwoojeong shinwoojeong 4096 Jun  8 13:20 my-docker-file
+drwxr-xr-x 2 shinwoojeong shinwoojeong 4096 Jun  8 17:12 package
+
+shinwoojeong@ShinWooJeong:~/trytry$ docker run -v ./docker-config:/opt/tegola_config -p 8080 gospatial/tegola serve --config /opt/tegola_config/config.toml
+docker: Error response from daemon: create ./docker-config: "./docker-config" includes invalid characters for a local volume name, only "[a-zA-Z0-9][a-zA-Z0-9_.-]" are allowed. If you intended to pass a host directory, use absolute path.
+See 'docker run --help'.
+
+shinwoojeong@ShinWooJeong:~/trytry$ pwd
+/home/shinwoojeong/trytry
+
+shinwoojeong@ShinWooJeong:~/trytry$ cd docker-*
+-bash: cd: too many arguments
+
+shinwoojeong@ShinWooJeong:~/trytry$ cd docker-config
+
+shinwoojeong@ShinWooJeong:~/trytry/docker-config$ ls -al
+total 8
+drwxr-xr-x 2 shinwoojeong shinwoojeong 4096 Jun  8 13:20 .
+drwxr-xr-x 5 shinwoojeong shinwoojeong 4096 Jun  8 17:12 ..
+-rw-r--r-- 1 shinwoojeong shinwoojeong    0 Jun  5 20:24 config.toml
+
+shinwoojeong@ShinWooJeong:~/trytry/docker-config$ pwd
+/home/shinwoojeong/trytry/docker-config
+
+shinwoojeong@ShinWooJeong:~/trytry/docker-config$ docker run \
+-v /home/shinwoojeong/trytry/docker-config:/opt/tegola_config \
+-p 8080 gospatial/tegola serve --config /opt/tegola_config/config.toml
+
+2020-06-08 08:47:18 [INFO] root.go:61: Loading config file: /opt/tegola_config/config.toml
+2020-06-08 08:47:18 [INFO] config.go:209: loading local config (/opt/tegola_config/config.toml)
+2020-06-08 08:47:18 [INFO] server.go:86: starting tegola server on port :8080
+
+
+
+------------------------------------복습 및 적용---------------------------------------------------------------------------------------
+
+shinwoojeong@ShinWooJeong:~$ pwd
+/home/shinwoojeong
+shinwoojeong@ShinWooJeong:~$ ls -al
+total 68
+drwxr-xr-x 10 shinwoojeong shinwoojeong 4096 Jun  9 10:00 .
+drwxr-xr-x  3 root         root         4096 Jun  5 12:17 ..
+-rw-------  1 shinwoojeong shinwoojeong 5323 Jun  8 17:02 .bash_history
+-rw-r--r--  1 shinwoojeong shinwoojeong  220 Jun  5 12:17 .bash_logout
+-rw-r--r--  1 shinwoojeong shinwoojeong 3771 Jun  5 12:17 .bashrc
+drwxrwxrwx  3 shinwoojeong shinwoojeong 4096 Jun  5 12:17 .cache
+drwx------  3 shinwoojeong shinwoojeong 4096 Jun  5 12:17 .config
+drwxr-xr-x  2 shinwoojeong shinwoojeong 4096 Jun  5 14:26 .docker
+-rw-r--r--  1 shinwoojeong shinwoojeong  807 Jun  5 12:17 .profile
+-rw-r--r--  1 shinwoojeong shinwoojeong    0 Jun  5 14:49 .sudo_as_admin_successful
+-rw-------  1 shinwoojeong shinwoojeong 1297 Jun  5 15:23 .viminfo
+drwxr-xr-x  2 shinwoojeong shinwoojeong 4096 Jun  9 10:00 app
+drwxr-xr-x  6 shinwoojeong shinwoojeong 4096 Jun  8 16:06 django-sample-for-docker-compose
+-rw-r--r--  1 shinwoojeong shinwoojeong  858 Jun  8 14:24 docker-compose.yml
+drwxr-xr-x  2 shinwoojeong shinwoojeong 4096 Jun  5 15:28 git-from-dockerf
+drwxr-xr-x  2 shinwoojeong shinwoojeong 4096 Jun  9 10:00 src
+drwxr-xr-x  5 shinwoojeong shinwoojeong 4096 Jun  8 17:12 trytry
+
+shinwoojeong@ShinWooJeong:~$ cd /
+
+shinwoojeong@ShinWooJeong:/$ dir
+bin   c    etc   init  lib64       media  opt   root  sbin  srv  tmp  var
+boot  dev  home  lib   lost+found  mnt    proc  run   snap  sys  usr
+
+shinwoojeong@ShinWooJeong:/$ cd usr
+
+shinwoojeong@ShinWooJeong:/usr$ cd ..
+
+shinwoojeong@ShinWooJeong:/$ cd mnt
+
+shinwoojeong@ShinWooJeong:/mnt$ cd c
+
+shinwoojeong@ShinWooJeong:/mnt/c$ cd Users
+
+shinwoojeong@ShinWooJeong:/mnt/c/Users$ cd U*
+
+shinwoojeong@ShinWooJeong:/mnt/c/Users/User$ dir
+3D\ Objects                                                                                   NetHood
+AppData                                                                                       OneDrive
+Application\ Data                                                                             Pictures
+Contacts                                                                                      PrintHood
+Cookies                                                                                       Recent
+Desktop                                                                                       Saved\ Games
+Documents                                                                                     Searches
+Downloads                                                                                     SendTo
+Favorites                                                                                     Templates
+Links                                                                                         Videos
+Local\ Settings                                                                               _.swp
+MicrosoftEdgeBackups                                                                          _viminfo
+Music                                                                                         cvat
+My\ Documents                                                                                 doodle
+NTUSER.DAT                                                                                    example-voting-app
+NTUSER.DAT{b21395d6-a31f-11ea-a810-000d3aa4ae95}.TxR.0.regtrans-ms                            getting-started
+NTUSER.DAT{b21395d6-a31f-11ea-a810-000d3aa4ae95}.TxR.1.regtrans-ms                            ntuser.dat.LOG1
+NTUSER.DAT{b21395d6-a31f-11ea-a810-000d3aa4ae95}.TxR.2.regtrans-ms                            ntuser.dat.LOG2
+NTUSER.DAT{b21395d6-a31f-11ea-a810-000d3aa4ae95}.TxR.blf                                      ntuser.ini
+NTUSER.DAT{b21395d7-a31f-11ea-a810-000d3aa4ae95}.TM.blf                                       trytry
+NTUSER.DAT{b21395d7-a31f-11ea-a810-000d3aa4ae95}.TMContainer00000000000000000001.regtrans-ms  vimfiles
+NTUSER.DAT{b21395d7-a31f-11ea-a810-000d3aa4ae95}.TMContainer00000000000000000002.regtrans-ms  시작\ 메뉴
+
+shinwoojeong@ShinWooJeong:/mnt/c/Users/User$ cd try*
+
+shinwoojeong@ShinWooJeong:/mnt/c/Users/User/trytry$ dir
+Dockerfile  docker-compose.yml  docker-config  my-docker-file  package  package-lock.json  wemap
+
+shinwoojeong@ShinWooJeong:/mnt/c/Users/User/trytry$ cd wemap
+
+shinwoojeong@ShinWooJeong:/mnt/c/Users/User/trytry/wemap$ dir
+Dockerfile  node_modules  package-lock.json  package.json  public  style_server.js  views
+
+shinwoojeong@ShinWooJeong:/mnt/c/Users/User/trytry/wemap$ cd public
+
+shinwoojeong@ShinWooJeong:/mnt/c/Users/User/trytry/wemap/public$ ls -al
+total 0
+drwxrwxrwx 1 shinwoojeong shinwoojeong 4096 Jun  8 18:11 .
+drwxrwxrwx 1 shinwoojeong shinwoojeong 4096 Jun  8 19:30 ..
+drwxrwxrwx 1 shinwoojeong shinwoojeong 4096 Jun  8 18:11 dist
+drwxrwxrwx 1 shinwoojeong shinwoojeong 4096 Jun  8 18:11 spritesets
+drwxrwxrwx 1 shinwoojeong shinwoojeong 4096 Jun  8 18:08 style
+
+shinwoojeong@ShinWooJeong:/mnt/c/Users/User/trytry/wemap/public$ pwd
+/mnt/c/Users/User/trytry/wemap/public
+
+shinwoojeong@ShinWooJeong:/mnt/c/Users/User/trytry/wemap/public$
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------------
+도커 컴포즈 파일 버전 : https://roseline124.github.io/kuberdocker/2019/07/24/docker-study06.html
+
+
+
+
+노드웹 맥의 도커라이징
+https://nodejs.org/ko/docs/guides/nodejs-docker-webapp/
